@@ -1,0 +1,28 @@
+@import "bootstrap/scss/bootstrap";
+:root {
+  --color-red: red;
+  --color-blue: blue;
+  --color-green: green;
+  --color-yellow: yellow;
+  --color-purple: purple;
+}
+.player {
+  color: var(--player-color); /* Verwendung der CSS-Variable für die Farbe */
+}
+.content-box {
+    background-image: url("@/assets/pictures/tilebackground.jpg");
+    background-size: cover; /* Bild so anpassen, dass es die gesamte Fläche ausfüllt */
+    background-position: top center; /* Positionierung der Schaumkrone */
+    background-repeat: no-repeat; /* Verhindere Wiederholungen des Hintergrundbilds */
+    margin: 1vh;
+    padding: 2vh;
+    border-radius: 25px;
+    border: 0.3vh solid black;
+    overflow: visible;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    color: white;
+    height: 80vh;
+  }

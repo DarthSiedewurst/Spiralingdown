@@ -1,0 +1,41 @@
+<script setup lang="ts"></script>
+
+<template>
+  <div class="background">
+
+    <div class="container">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.background {
+  /* Hintergrundbild */
+  background-image: url("./assets/pictures/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Vollbildgröße */
+  width: 100vw;
+  height: 100vh;
+
+  /* Positionierung des Inhalts */
+  display: flex;
+  flex-direction: column; /* Elemente vertikal anordnen */
+  align-items: flex-start; /* Inhalt oben beginnen */
+  padding-top: 20px; /* Abstand vom oberen Rand */
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.navigation {
+  padding: 10px;
+  font-size: 1.2em;
+}
+
+.container {
+  width: 100%;
+}
+</style>

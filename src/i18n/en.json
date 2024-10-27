@@ -1,0 +1,17 @@
+{
+  "title": "Spiraling Down",
+  "currentPlayers": "Current Players",
+  "delete": "Delete",
+  "addPlayer": "Add Player",
+  "playerName": "Player Name",
+  "colorChoice": "Color Choice",
+  "chooseColor": "Choose a color",
+  "startGame": "Start Game",
+  "colors": [
+    { "name": "Red", "value": "red" },
+    { "name": "Blue", "value": "blue" },
+    { "name": "Green", "value": "green" },
+    { "name": "Yellow", "value": "yellow" },
+    { "name": "Purple", "value": "purple" }
+  ]
+}

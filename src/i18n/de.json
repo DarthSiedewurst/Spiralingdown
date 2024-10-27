@@ -1,0 +1,17 @@
+{
+  "title": "Spiraling Down",
+  "currentPlayers": "Aktuelle Spieler",
+  "delete": "Löschen",
+  "addPlayer": "Spieler hinzufügen",
+  "playerName": "Spielername",
+  "colorChoice": "Farbauswahl",
+  "chooseColor": "Wähle eine Farbe",
+  "startGame": "Zum Spiel",
+  "colors": [
+    { "name": "Rot", "value": "red" },
+    { "name": "Blau", "value": "blue" },
+    { "name": "Grün", "value": "green" },
+    { "name": "Gelb", "value": "yellow" },
+    { "name": "Lila", "value": "purple" }
+  ]
+}
