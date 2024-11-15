@@ -1,11 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Sidebar from "./components/Sidebar.vue";
+</script>
 
 <template>
   <div class="background">
-
-    <div class="container">
-      <router-view />
-    </div>
+    <Sidebar />
+    <router-view />
   </div>
 </template>
 
@@ -25,7 +25,6 @@
   display: flex;
   flex-direction: column; /* Elemente vertikal anordnen */
   align-items: flex-start; /* Inhalt oben beginnen */
-  padding-top: 20px; /* Abstand vom oberen Rand */
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }

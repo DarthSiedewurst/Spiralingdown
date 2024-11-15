@@ -1,17 +1,25 @@
 {
-  "title": "Spiraling Down",
+  "title": "Willkommen",
   "currentPlayers": "Aktuelle Spieler",
   "delete": "Löschen",
-  "addPlayer": "Spieler hinzufügen",
   "playerName": "Spielername",
   "colorChoice": "Farbauswahl",
   "chooseColor": "Wähle eine Farbe",
-  "startGame": "Zum Spiel",
-  "colors": [
-    { "name": "Rot", "value": "red" },
-    { "name": "Blau", "value": "blue" },
-    { "name": "Grün", "value": "green" },
-    { "name": "Gelb", "value": "yellow" },
-    { "name": "Lila", "value": "purple" }
-  ]
+  "addPlayer": "Spieler hinzufügen",
+  "startGame": "Spiel starten",
+  "chooseRuleset": "Regelsatz auswählen",
+  "colors": {
+    "yellow": "Gelb",
+    "orange": "Orange",
+    "green": "Grün",
+    "purple": "Lila",
+    "black": "Schwarz",
+    "dafuq": "Dafuq",
+    "blue": "Blau",
+    "aqua": "Aqua",
+    "pink": "Rosa",
+    "brown": "Braun",
+    "red": "Rot",
+    "white": "Weiß"
+  }
 }
