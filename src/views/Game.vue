@@ -52,15 +52,18 @@ const borderBottom = [
   59, 60, 61, 62, 63, 52, 53, 54, 55, 69, 70, 71, 66, 67,
 ];
 
-const gameData = store.ruleset.de
+// Zugriff auf die aktuellen Regeln
+const gameData = store.currentRuleset;
+
 const currentPosition = ref(0);
 const playersOnField = (fieldId: number) =>
   store.players.filter((player) => player.position === fieldId);
 
 function getFieldData(fieldId: number) {
-  return gameData[`fieldId${fieldId}`] || { name: "" };
+  return gameData?.[`fieldId${fieldId}`] || { name: "", description: "" };
 }
 </script>
+
 
 <style scoped>
 html,

@@ -4,7 +4,17 @@ import Sidebar from "./components/Sidebar.vue";
 
 <template>
   <div class="background">
+    <div
+      class="gear-icon"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseWidthExample"
+      aria-expanded="false"
+      aria-controls="collapseWidthExample"
+    >
+      ⚙️
+    </div>
     <Sidebar />
+    
     <router-view />
   </div>
 </template>
@@ -36,5 +46,15 @@ import Sidebar from "./components/Sidebar.vue";
 
 .container {
   width: 100%;
+}
+.gear-icon {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1001;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 </style>

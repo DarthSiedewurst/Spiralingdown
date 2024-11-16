@@ -8,6 +8,9 @@
   "addPlayer": "Add Player",
   "startGame": "Start Game",
   "chooseRuleset": "Choose Ruleset",
+  "settings": "Settings",
+  "chooseLanguage": "Choose language",
+  "saveSettings": "Save settings",  
   "colors": {
     "yellow": "Yellow",
     "orange": "Orange",

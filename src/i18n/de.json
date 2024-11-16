@@ -8,6 +8,9 @@
   "addPlayer": "Spieler hinzufügen",
   "startGame": "Spiel starten",
   "chooseRuleset": "Regelsatz auswählen",
+  "settings": "Einstellungen",
+  "chooseLanguage": "Sprache wählen",
+  "saveSettings": "Einstellungen speichern",
   "colors": {
     "yellow": "Gelb",
     "orange": "Orange",

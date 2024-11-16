@@ -1,14 +1,19 @@
-// store.ts
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import rules from "../rules";
+
 export const useGameStore = defineStore("game", () => {
+  const { locale } = useI18n(); // Zugriff auf die aktuelle Sprache
+  
   const settings = ref({
     music: false,
     sound: true,
     vibration: false,
   });
+  
   const players = ref<{ name: string; color: string; position: number }[]>([]);
+  
   const colors = ref([
     {
       i18nKey: "colors.yellow",
@@ -83,12 +88,21 @@ export const useGameStore = defineStore("game", () => {
         "invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(200%)",
     },
   ]);
-  const ruleset = ref(rules.SpiralingDown);
-  const availableRulesets = ref(Object.keys(rules)); // Erstellen einer Liste der verfügbaren Regelsets
 
+  const availableRulesets = ref(Object.keys(rules)); // Liste der verfügbaren Regelsets
+  const activeRuleset = ref<keyof typeof rules>("SpiralingDown"); // Aktives Regelset
+
+  // Sprachabhängiges Regelset
+  const currentRuleset = computed(() => {
+    const ruleSet = rules[activeRuleset.value];
+    return ruleSet[locale.value as keyof typeof ruleSet];
+  });
+
+  // Funktionen
   function setSettings(newSettings: Partial<typeof settings.value>) {
     settings.value = { ...settings.value, ...newSettings };
   }
+
   function addPlayer(name: string, color: string) {
     players.value.push({ name, color, position: 0 });
   }
@@ -98,13 +112,18 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function setActiveRules(ruleSetName: keyof typeof rules) {
-    ruleset.value = rules[ruleSetName];
+    activeRuleset.value = ruleSetName;
   }
+
+  // Überwachung der Sprache (optional, falls weitere Effekte gewünscht)
+  watch(locale, () => {
+    console.log(`Sprache geändert zu: ${locale.value}`);
+  });
 
   return {
     players,
     colors,
-    ruleset,
+    currentRuleset,
     availableRulesets,
     settings,
     addPlayer,
