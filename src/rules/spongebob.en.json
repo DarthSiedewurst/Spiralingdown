@@ -1,0 +1,435 @@
+{
+  "name": "Goofy Goober",
+  "fieldId0": {
+    "name": "Bikini Bottom",
+    "description": "A special message: All rules have been repealed",
+    "move": 0,
+    "rulerule": "-"
+  },
+  "fieldId1": {
+    "name": "I'm ready!",
+    "description": "I'm ready! I'm ready! I'm ready! Gehe zur Krossen Krabbe",
+    "move": 9,
+    "rulerule": ""
+  },
+  "fieldId2": {
+    "name": "You smell",
+    "description": "You are not ugly at all. Drink 2 out of relief",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId3": {
+    "name": "Don't you have to be stupid somewhere else",
+    "description": "Not until 4. Drink 4",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId4": {
+    "name": "When in doubt, pinky out",
+    "description": "Pinky must always be raised when drinking",
+    "move": 0,
+    "rulerule": "Pinky must always be raised when drinking"
+  },
+  "fieldId5": {
+    "name": "Escalators, escalators, escalators",
+    "description": "Go to field 34",
+    "move": 29,
+    "rulerule": ""
+  },
+  "fieldId6": {
+    "name": "Hash-Slinging Slasher",
+    "description": "You are Hash-Slinging Slasher, give 5",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId7": {
+    "name": "You are Squidward",
+    "description": "Find another Squidward. You always drink together. (There is only 1 pair of Squidward)",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId8": {
+    "name": "It's about imagination",
+    "description": "Choose a category. Clockwise, say a suitable word or take 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId9": {
+    "name": "I am ready to partey",
+    "description": "Are you ready to partey? All drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId10": {
+    "name": "Krusty Krab",
+    "description": "Is this the Krusty Krab? No, this is Patrick. To deal with your customers' incompetence, drink 3 ",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId11": {
+    "name": "Explosion",
+    "description": "YOU GONNA DRINK 2 SIPS! AND YOU ARE GONNA LIKE IT!",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId12": {
+    "name": "Driving school",
+    "description": "Misses Puff puffs up and the lighthouse breaks. Pay by drinking 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId13": {
+    "name": "Mermaid Man's belt",
+    "description": "M- for Mini: Your sips are canceled for 1 round {switch} W - for Wumbo: Your sips are doubled for 1 round",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId14": {
+    "name": "Larry",
+    "description": "You are far from your natural habitat. Go to the Goo Lagoon",
+    "move": 13,
+    "rulerule": ""
+  },
+  "fieldId15": {
+    "name": "Dirty Dan",
+    "description": "Who is the real Dirty Dan? The last person to make finger guns drinks",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId16": {
+    "name": "Atomic Flounder",
+    "description": "Atomic Flounder is retired",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId17": {
+    "name": "When I ripped my pants",
+    "description": "Drink 3 to deal with the embarrassment {switch} You hit a heartbreaking hit. Everyone else is drinking 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId18": {
+    "name": "Opposite day",
+    "description": "Don't take 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId19": {
+    "name": "No driver's license",
+    "description": "Go to driving school on your unicycle",
+    "move": -7,
+    "rulerule": ""
+  },
+  "fieldId20": {
+    "name": "Carnival",
+    "description": "We are going to the carnival. We are going to the carnival. Everybody drinks",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId21": {
+    "name": "Hydro-dynamic spatula",
+    "description": "with port and starboard attachments and turbo drive. There was only one in stock. If you are the first on this field you can distribute 4, otherwise drink them",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId22": {
+    "name": "Buddy Bubble",
+    "description": "You are the Buddy Bubble, everyone gives you 1-2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId23": {
+    "name": "The Dutchman's Treasor",
+    "description": "You get a plastic treasure, drink 4 {switch} You receive 2 gold doubloons. You can distribute each in form of 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId24": {
+    "name": "24",
+    "description": "Twentyfooour, drink 4",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId25": {
+    "name": "25",
+    "description": "I thought of something funnier than 24..........25! Distribute 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId26": {
+    "name": "Pioniere",
+    "description": "Ride forward 5 fields. On a rock!",
+    "move": 5,
+    "rulerule": ""
+  },
+  "fieldId27": {
+    "name": "Goo Lagoon",
+    "description": "{playerName} is the lifeguard. He / she is responsible for ensuring that there are no empty drinks",
+    "move": 0,
+    "rulerule": "{playerName} is the lifeguard. He / she is responsible for ensuring that there are no empty drinks"
+  },
+  "fieldId28": {
+    "name": "Do the Sponge",
+    "description": "Bet you're buns you're doin' the sponge and drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId29": {
+    "name": "...eeeeeeels",
+    "description": "Go back you Dirty Bubble",
+    "move": -29,
+    "rulerule": ""
+  },
+  "fieldId30": {
+    "name": "Laugh Box",
+    "description": "The first person to laugh has to drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId31": {
+    "name": "Palace of Pranks",
+    "description": "You used invisibility spray. Everyone else has to ignore you for a round",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId32": {
+    "name": "Accompany Pearl",
+    "description": "Accompany Perler to the prom",
+    "move": -4,
+    "rulerule": ""
+  },
+  "fieldId33": {
+    "name": "Mermaid Man and Barnacle Boy reunited",
+    "description": "You are a Mermaid Man. Find yourself a Barnacle Boy. You always drink together (there can only be one superhero couple at a time)",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId34": {
+    "name": "Claus, Claus, Claus",
+    "description": "{playerName} is now Claus. Whoever speaks to her / him differently gets scared and has to drink 1.",
+    "move": 0,
+    "rulerule": "{playerName} is now Claus. Whoever speaks to her / him differently gets scared and has to drink 1."
+  },
+  "fieldId35": {
+    "name": "Touch",
+    "description": "Wait Giesela, I have to touch you! Touch the opposite person within the next 10 seconds",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId36": {
+    "name": "Mr. Krabs",
+    "description": "You are Mr Krabs. The next sips are too expensive for you. Don't drink them",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId37": {
+    "name": "Chum Bucket",
+    "description": "The burgers taste awful. Better go to the Krusty Krab",
+    "move": -27,
+    "rulerule": ""
+  },
+  "fieldId38": {
+    "name": "Plan Z",
+    "description": "Plankton's plan worked. Everyone is drinking 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId39": {
+    "name": "David Hasselhoff",
+    "description": "{playerName} is David Hasselhoff. Pose whenever possible",
+    "move": 0,
+    "rulerule": "{playerName} is David Hasselhoff. Pose whenever possible"
+  },
+  "fieldId40": {
+    "name": "Thug Tug",
+    "description": "Speak together. Anyone who makes a mistake has to drink: All bubble-blowing babies will be beaten senseless by every able-bodied patron in the bar.",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId41": {
+    "name": "Jellyfish Fields",
+    "description": "A jellyfish stung you. Take 3 sips {switch} You caught 2 jellyfish. Give 2 sips {switch} You caught 3 jellyfish. Give 3 sips {switch} You caught 4 jellyfish. Give 4 sips {switch} You caught 5 jellyfish. Give 5 sips {switch} You found Cnidaria Rex. Take 6 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId42": {
+    "name": "Anchor throwing",
+    "description": "Your air arms are no good, drink 2 {switch} You won you animal! Distribute 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId43": {
+    "name": "Technique",
+    "description": "Technique moves you forward. Go 6 fields forward",
+    "move": 4,
+    "rulerule": ""
+  },
+  "fieldId44": {
+    "name": "Is mayonnaise an instrument?",
+    "description": "No Patrick, horse radish isn't an instrument either. Drink 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId45": {
+    "name": "Gary",
+    "description": "Meow",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId46": {
+    "name": "Karate",
+    "description": "Challenge someone to a game of Rock Paper Scissors. The loser drinks",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId47": {
+    "name": "King Neptune",
+    "description": "King Neptune gives you the golden spatula. Redistribute everything you need to drink for a round",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId48": {
+    "name": "Ghost, Ghost, Toast",
+    "description": "You were frightened. Drink 2 {switch} You were scared. Drink 3 {switch} You are fearless. Your neighbors drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId49": {
+    "name": "Bubble Bass",
+    "description": "You didn't find the pickles under the Bubble Bass tongue. Drink 2 {switch} You found the pickles under the Bubble Bass tongue. Distribute 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId50": {
+    "name": "Salty Spitoon",
+    "description": "Show that you are tough enough for the Salty Spitoon by drinking 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId51": {
+    "name": "We are going to the Carnival",
+    "description": "You had fun at the Carnival and gently float back to the ground",
+    "move": -31,
+    "rulerule": ""
+  },
+  "fieldId52": {
+    "name": "You're on the hook",
+    "description": "Your tuna can arrives at the start again",
+    "move": -52,
+    "rulerule": ""
+  },
+  "fieldId53": {
+    "name": "Nautical knot",
+    "description": "The Monkey chain! You and your neighbors drink {switch} The Monkey's Fist! You may distribute 3 {switch} The Monkey! Everyone is drinking",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId54": {
+    "name": "Sandys Dome",
+    "description": "There is no water at Sandy. Fast! Drink 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId55": {
+    "name": "The Quickster",
+    "description": "You're too quick for the rest. Get a round of immunity",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId56": {
+    "name": "The Elastic Waistband",
+    "description": "You can finally touch your toes. Celebrate with 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId57": {
+    "name": "Miss Appear",
+    "description": "You are seen. Drink 3 {switch} You are invisible. Distribute 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId58": {
+    "name": "Captain Magma",
+    "description": "Before every drink you have to say 'Krakataua'",
+    "move": 0,
+    "rulerule": "Before every drink you have to say 'Krakataua'"
+  },
+  "fieldId59": {
+    "name": "I think I'll eat it now",
+    "description": "The first person to empty their drink may distribute 8",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId60": {
+    "name": "Rock Bottom",
+    "description": "give yourself Dutch courage",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId61": {
+    "name": "F.U.N",
+    "description": "Drink together 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId62": {
+    "name": "Criminal",
+    "description": "If you were a criminal, you'd get yourself an ice cream. Give 1 sip {switch} As a criminal, you would get yourself another ice cream. Give 2 sips ",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId63": {
+    "name": "Anti-Sea Rhinoceros Undergarments",
+    "description": "You don't have your anti-sea rhinoceros undergarments on. A sea rhinoceros chases you back to the Goo Lagoon",
+    "move": -13,
+    "rulerule": ""
+  },
+  "fieldId64": {
+    "name": "Are you angry too?",
+    "description": "Anyone who cannot see their forehead drinks",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId65": {
+    "name": "Good Noodle Star",
+    "description": "Drink for every player who has less good noodle stars than you and is thus behind you",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId66": {
+    "name": "An idea",
+    "description": "Take your sips and push it somewhere else. Distribute 5",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId67": {
+    "name": "17th Century Soup Ladle",
+    "description": "You should drink 5. But you can only drink 7",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId68": {
+    "name": "Oh boy, 3 a.m.",
+    "description": "Time for a Krabby Patty. Drink 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId69": {
+    "name": "3 wishes",
+    "description": "I wish I had known that earlier",
+    "move": -1,
+    "rulerule": ""
+  },
+  "fieldId70": {
+    "name": "Magic Conch shell",
+    "description": "Oh Magic Conch shell, which field should I go to?",
+    "move": -99,
+    "rulerule": ""
+  },
+  "fieldId71": {
+    "name": "VICTORY",
+    "description": "",
+    "move": 0,
+    "rulerule": ""
+  }
+}

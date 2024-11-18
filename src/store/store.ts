@@ -1,19 +1,23 @@
 import { defineStore } from "pinia";
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import rules from "../rules";
+import i18n from "../i18n/i18n";
+import MusicService from "../services/musicService";
 
 export const useGameStore = defineStore("game", () => {
   const { locale } = useI18n(); // Zugriff auf die aktuelle Sprache
-  
+  const currentLocale = ref(locale.value);
+
   const settings = ref({
     music: false,
     sound: true,
     vibration: false,
   });
-  
+
+  const musicService = new MusicService();
+
   const players = ref<{ name: string; color: string; position: number }[]>([]);
-  
+
   const colors = ref([
     {
       i18nKey: "colors.yellow",
@@ -89,14 +93,23 @@ export const useGameStore = defineStore("game", () => {
     },
   ]);
 
-  const availableRulesets = ref(Object.keys(rules)); // Liste der verfügbaren Regelsets
-  const activeRuleset = ref<keyof typeof rules>("SpiralingDown"); // Aktives Regelset
+  const availableRulesets = ref<string[]>(
+    Object.keys(
+      i18n.global.messages[
+        currentLocale.value as keyof typeof i18n.global.messages
+      ].rules
+    ) // Schlüsselnamen der Regelsets
+  );
 
-  // Sprachabhängiges Regelset
-  const currentRuleset = computed(() => {
-    const ruleSet = rules[activeRuleset.value];
-    return ruleSet[locale.value as keyof typeof ruleSet];
-  });
+  const activeRuleset = ref<string>(availableRulesets.value[0] || "");
+
+  const currentRuleset = ref(
+    (
+      i18n.global.messages[
+        currentLocale.value as keyof typeof i18n.global.messages
+      ].rules as { [key: string]: any }
+    )["spiralingDown"]
+  );
 
   // Funktionen
   function setSettings(newSettings: Partial<typeof settings.value>) {
@@ -110,21 +123,45 @@ export const useGameStore = defineStore("game", () => {
   function removePlayer(index: number) {
     players.value.splice(index, 1);
   }
-
-  function setActiveRules(ruleSetName: keyof typeof rules) {
-    activeRuleset.value = ruleSetName;
+  function setActiveRules(ruleSetName: string) {
+    if (availableRulesets.value.includes(ruleSetName)) {
+      activeRuleset.value = ruleSetName;
+    } else {
+      console.warn(`Regelset "${ruleSetName}" ist nicht verfügbar.`);
+    }
   }
 
   // Überwachung der Sprache (optional, falls weitere Effekte gewünscht)
   watch(locale, () => {
     console.log(`Sprache geändert zu: ${locale.value}`);
+    currentLocale.value = locale.value;
   });
+
+  watch([activeRuleset, currentLocale], () => {
+    currentRuleset.value = (
+      i18n.global.messages[
+        currentLocale.value as keyof typeof i18n.global.messages
+      ].rules as { [key: string]: any }
+    )[activeRuleset.value];
+  });
+
+  watch(
+    () => settings.value.music,
+    (newValue) => {
+      if (newValue) {
+        musicService.playMusic(); // Musik starten
+      } else {
+        musicService.stopMusic(); // Musik stoppen
+      }
+    }
+  );
 
   return {
     players,
     colors,
     currentRuleset,
     availableRulesets,
+    activeRuleset,
     settings,
     addPlayer,
     removePlayer,

@@ -1,4 +1,5 @@
 @import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 :root {
   --color-red: red;
@@ -7,23 +8,87 @@
   --color-yellow: yellow;
   --color-purple: purple;
 }
+.bierdeckel {
+  bottom: 2vh; /* Abstand vom unteren Rand */
+  right: 2vh; /* Abstand vom rechten Rand */
+  width: 15vh; /* Größe des Buttons */
+  height: 15vh; /* Quadratisch */
+  background-image: url("@/assets/pictures/bierdeckel.jpg"); /* Hintergrundbild */
+  background-size: cover; /* Bild vollständig anzeigen */
+  background-position: center; /* Zentrieren des Bildes */
+  background-repeat: no-repeat; /* Keine Wiederholung des Bildes */
+  border: none; /* Entferne Standard-Grenzen */
+  border-radius: 50%; /* Runde den Button */
+  display: flex; /* Ermöglicht Text-Inhalt zu platzieren */
+  justify-content: center; /* Text zentrieren */
+  align-items: center; /* Text vertikal zentrieren */
+  text-decoration: none; /* Entferne Unterstreichung */
+  color: white; /* Textfarbe */
+  font-size: 2.5vh; /* Textgröße */
+  font-weight: bold; /* Fettgedruckt */
+}
+
+.overflow {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.bierdeckel:hover {
+  transform: scale(1.1); /* Animation bei Hover */
+  transition: transform 0.2s ease-in-out;
+}
+.ml-auto {
+  margin-left: auto;
+}
 .player {
   color: var(--player-color); /* Verwendung der CSS-Variable für die Farbe */
 }
 .content-box {
-    background-image: url("@/assets/pictures/tilebackground.jpg");
-    background-size: cover; /* Bild so anpassen, dass es die gesamte Fläche ausfüllt */
-    background-position: top center; /* Positionierung der Schaumkrone */
-    background-repeat: no-repeat; /* Verhindere Wiederholungen des Hintergrundbilds */
-    margin: 1vh;
-    padding: 2vh;
-    border-radius: 25px;
-    border: 0.3vh solid black;
-    overflow: visible;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    color: white;
-    height: 87vh;
-  }
+  background-image: url("@/assets/pictures/tilebackground.jpg");
+  background-size: cover; /* Bild so anpassen, dass es die gesamte Fläche ausfüllt */
+  background-position: top center; /* Positionierung der Schaumkrone */
+  background-repeat: no-repeat; /* Verhindere Wiederholungen des Hintergrundbilds */
+  margin: 1vh;
+  padding: 2vh;
+  border-radius: 5vh;
+  border: 0.3vh solid black;
+  overflow: visible;
+  background-size: 115% 100%;
+  border: 0.1vh solid #dee2e6;
+  border-radius: 5vh;
+  color: white;
+  height: 80vh;
+}
+
+.background {
+  /* Hintergrundbild */
+  background-image: url("@/assets/pictures/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Vollbildgröße */
+  width: 100vw;
+  height: 100vh;
+
+  /* Positionierung des Inhalts */
+  display: flex;
+  flex-direction: column; /* Elemente vertikal anordnen */
+  align-items: flex-start; /* Inhalt oben beginnen */
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+.container {
+  width: 100%;
+  max-width: 100%;
+}
+.gear-icon {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1001;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}

@@ -3,7 +3,7 @@
     <tbody>
       <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
         <td
-          v-for="(fieldId) in row"
+          v-for="fieldId in row"
           :key="'col-' + fieldId"
           class="field"
           :class="{
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useGameStore } from "../store/store";
 
 import Player from "@/components/Player.vue";
@@ -53,17 +53,16 @@ const borderBottom = [
 ];
 
 // Zugriff auf die aktuellen Regeln
-const gameData = store.currentRuleset;
+const gameData = computed(() => store.currentRuleset);
 
 const currentPosition = ref(0);
 const playersOnField = (fieldId: number) =>
   store.players.filter((player) => player.position === fieldId);
 
-function getFieldData(fieldId: number) {
-  return gameData?.[`fieldId${fieldId}`] || { name: "", description: "" };
-}
+const getFieldData = computed(() => (fieldId: number) => {
+  return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
+});
 </script>
-
 
 <style scoped>
 html,

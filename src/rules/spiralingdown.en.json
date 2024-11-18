@@ -1,0 +1,435 @@
+{
+  "name": "Spiraling Down",
+  "fieldId0": {
+    "name": "Start",
+    "description": "Ahahahahahahahaha ... drink (rules are canceled)",
+    "move": 0,
+    "rulerule": "-"
+  },
+  "fieldId1": {
+    "name": "A 1...seriously",
+    "description": "Drink 6 sips or give 1 euro to a player of your choice",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId2": {
+    "name": "Drink together",
+    "description": "You and the people next to you have a drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId3": {
+    "name": "Go back",
+    "description": "one field back",
+    "move": -1,
+    "rulerule": ""
+  },
+  "fieldId4": {
+    "name": "Double round",
+    "description": "Until it's your turn again, your sips are doubled",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId5": {
+    "name": "Distribute",
+    "description": "Today is Christmas morning, give 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId6": {
+    "name": "Lucky Shot",
+    "description": "Go to field 30",
+    "move": 24,
+    "rulerule": ""
+  },
+  "fieldId7": {
+    "name": "You are allowed to drink",
+    "description": "FINALLY you are allowed to drink again",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId8": {
+    "name": "Drink!",
+    "description": "Drink what you rolled",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId9": {
+    "name": "Rule",
+    "description": "",
+    "move": 0,
+    "rulerule": "Random"
+  },
+  "fieldId10": {
+    "name": "Theme",
+    "description": "Choose a category. Clockwise, say a word or drink 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId11": {
+    "name": "Carnival",
+    "description": "All players share 11 sips fairly. You drink all excess.",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId12": {
+    "name": "Bye Bye",
+    "description": "go back 8 fields",
+    "move": -8,
+    "rulerule": ""
+  },
+  "fieldId13": {
+    "name": "INVADE!",
+    "description": "You and a person of your choice toast. Drink together 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId14": {
+    "name": "Up and away",
+    "description": "Move it",
+    "move": 4,
+    "rulerule": ""
+  },
+  "fieldId15": {
+    "name": "Let's all have a drink",
+    "description": "Explains itself",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId16": {
+    "name": "Coin toss",
+    "description": "Head, you drink 2. Tails everyone else drink 1",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId17": {
+    "name": "And goodbye",
+    "description": "Ciao, see you on field 4",
+    "move": -13,
+    "rulerule": ""
+  },
+  "fieldId18": {
+    "name": "We were lucky again",
+    "description": "Sit back and allow yourself a relaxing sip",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId19": {
+    "name": "American Idol",
+    "description": "Sing a song of your choice. The person who guesses it gives 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId20": {
+    "name": "Rule",
+    "description": "",
+    "move": 0,
+    "rulerule": "Random"
+  },
+  "fieldId21": {
+    "name": "BlackJack",
+    "description": "Predict what the next player will roll. If you are right, distribute 6. If you are wrong, drink 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId22": {
+    "name": "Schmidt fucked the captain's daughter",
+    "description": "It's really not that funny. The first person to laugh drinks 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId23": {
+    "name": "Spend",
+    "description": "Give 5 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId24": {
+    "name": "Blitzkrieg",
+    "description": "The last person to salute drinks 2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId25": {
+    "name": "Go back you will like it",
+    "description": "",
+    "move": -2,
+    "rulerule": ""
+  },
+  "fieldId26": {
+    "name": "Everyone",
+    "description": "Everyone drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId27": {
+    "name": "Theme",
+    "description": "Choose a category. Clockwise, say a word or drink 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId28": {
+    "name": "Vaccinated",
+    "description": "Until your next turn, you don't have to drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId29": {
+    "name": "Bye, bye my love of life",
+    "description": "but we'll both see each other again",
+    "move": -14,
+    "rulerule": ""
+  },
+  "fieldId30": {
+    "name": "Do you know the other players?",
+    "description": "Close your eyes. Which of your fellow players is pointing at you? For every mistake you slurp 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId31": {
+    "name": "Asshole",
+    "description": "Distribute 1-3 sips to everyone",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId32": {
+    "name": "Rule",
+    "description": "",
+    "move": 0,
+    "rulerule": "Random"
+  },
+  "fieldId33": {
+    "name": "Spin",
+    "description": "You have 6 penalty points. Drink or turn around yourself for each penalty point",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId34": {
+    "name": "The gentleman",
+    "description": "Distribut 3 sips or drink 1 yourself",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId35": {
+    "name": "A Beer On-The-Go",
+    "description": "Have a drink on the way, go 2 fields forward",
+    "move": 2,
+    "rulerule": ""
+  },
+  "fieldId36": {
+    "name": "Halftime",
+    "description": "Not for you",
+    "move": -36,
+    "rulerule": ""
+  },
+  "fieldId37": {
+    "name": "Postman",
+    "description": "Until your next turn, you hand out every sip you need to drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId38": {
+    "name": "Touchy",
+    "description": "Touch each player once within the next 10 seconds, or drink 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId39": {
+    "name": "Booze!",
+    "description": "Drink one",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId40": {
+    "name": "Booze again!",
+    "description": "Drink one",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId41": {
+    "name": "Distribute",
+    "description": "Distribute what you rolled",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId42": {
+    "name": "The answer to everything",
+    "description": "Share your useless knowledge. Everyone who did not know your useless fact drinks 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId43": {
+    "name": "Victory and defeat",
+    "description": "The first and the last drink",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId44": {
+    "name": "Swap with the last one",
+    "description": "Lucky. Not implemented yet",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId45": {
+    "name": "Rulebreaker",
+    "description": "Rule repealed",
+    "move": 0,
+    "rulerule": "-"
+  },
+  "fieldId46": {
+    "name": "Reaction",
+    "description": "Clap your hands. The last person drinks 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId47": {
+    "name": "4711",
+    "description": "Identify the most odorous person and drink with them",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId48": {
+    "name": "Double Trouble",
+    "description": "All your sips are doubled until it's your turn again",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId49": {
+    "name": "6 out of 49",
+    "description": "The first time someone reaches this field, distribute 4 winning sips. If it's not you, drink 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId50": {
+    "name": "Bachelor",
+    "description": "Kiss the player to your right or drink 4",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId51": {
+    "name": "Ruler of Three",
+    "description": "All show a number between 1 and 3 at the same time. For everyone who shows the same number as you, you drink 2",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId52": {
+    "name": "Stand up",
+    "description": "You are only allowed to sit again when your drink is empty",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId53": {
+    "name": "So close yet so far",
+    "description": "",
+    "move": -19,
+    "rulerule": ""
+  },
+  "fieldId54": {
+    "name": "Booze!",
+    "description": "",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId55": {
+    "name": "Boozer",
+    "description": "Determine who has drank the most. This Person may distribute 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId56": {
+    "name": "Break",
+    "description": "-",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId57": {
+    "name": "Ass card",
+    "description": "Everyone can give you 1-2 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId58": {
+    "name": "The spot on my left...",
+    "description": "...drinks",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId59": {
+    "name": "Teleport",
+    "description": "",
+    "move": -19,
+    "rulerule": ""
+  },
+  "fieldId60": {
+    "name": "Rule",
+    "description": "",
+    "move": 0,
+    "rulerule": "Random"
+  },
+  "fieldId61": {
+    "name": "Checksum",
+    "description": "Drink 7",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId62": {
+    "name": "Payday",
+    "description": "If you have won on field blackjack, everyone else drink 4. Otherwise, you will drink them yourself",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId63": {
+    "name": "Theme",
+    "description": "Choose a category. Clockwise, say a word or drink 3 sips",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId64": {
+    "name": "For the mob",
+    "description": "Take as many sips as there are players behind you.",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId65": {
+    "name": "Distribute",
+    "description": "Distribute 3",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId66": {
+    "name": "Pact with the devil",
+    "description": "Until it's your turn again, your sips are reduced by 1, but you are not allowed to speak",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId67": {
+    "name": "Nice try",
+    "description": "",
+    "move": -4,
+    "rulerule": ""
+  },
+  "fieldId68": {
+    "name": "Final sprurt",
+    "description": "Gather your strength by drinking 4",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId69": {
+    "name": "Hihihi 69",
+    "description": "Choose a partner. You create a Kamasutra position of your choice, or drink both 7",
+    "move": 0,
+    "rulerule": ""
+  },
+  "fieldId70": {
+    "name": "Close enough",
+    "description": "Bitter",
+    "move": -70,
+    "rulerule": ""
+  },
+  "fieldId71": {
+    "name": "VICTORY",
+    "description": "VICTORY",
+    "move": 0,
+    "rulerule": ""
+  }
+}

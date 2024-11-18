@@ -2,11 +2,11 @@
   <div class="container">
     <h1>{{ $t("title") }}</h1>
 
-    <div class="row mt-4">
-      <div class="col-md-8">
+    <div class="row mt-2">
+      <div class="col-8">
         <div class="content-box d-flex flex-column">
-          <div>
-            <h2>{{ $t("currentPlayers") }}</h2>
+          <h3>{{ $t("currentPlayers") }}</h3>
+          <div class="overflow">
             <ul class="list-unstyled">
               <li
                 v-for="(player, index) in players"
@@ -23,62 +23,59 @@
                 </button>
               </li>
             </ul>
-
-            <h2>{{ $t("addPlayer") }}</h2>
-            <div class="row mb-3">
-              <div class="col-md-8">
-                <label for="playerName" class="form-label">{{
-                  $t("playerName")
-                }}</label>
-                <input
-                  type="text"
-                  id="playerName"
-                  v-model="newPlayerName"
-                  class="form-control"
-                  required
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="playerColor" class="form-label">{{
-                  $t("colorChoice")
-                }}</label>
-                <select
-                  id="playerColor"
-                  v-model="newPlayerColor"
-                  class="form-select"
-                  required
-                >
-                  <option value="" disabled>{{ $t("chooseColor") }}</option>
-                  <option
-                    v-for="color in availableColors"
-                    :key="color.value"
-                    :value="color.value"
-                  >
-                    {{ color.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
           </div>
-
-          <!-- Spieler hinzufügen Button unten links -->
-          <div class="mt-auto">
-            <button @click="addPlayer" class="btn btn-primary">
-              {{ $t("addPlayer") }}
-            </button>
+          <div class="row mb-2 mt-auto">
+            <!-- Spieler hinzufügen Button unten links -->
+            <div class="col-2 mt-auto">
+              <button @click="addPlayer" class="bierdeckel">
+                {{ $t("addPlayer") }}
+              </button>
+            </div>
+            <div class="col-6">
+              <label for="playerName" class="form-label">{{
+                $t("playerName")
+              }}</label>
+              <input
+                type="text"
+                id="playerName"
+                v-model="newPlayerName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-4">
+              <label for="playerColor" class="form-label">{{
+                $t("colorChoice")
+              }}</label>
+              <select
+                id="playerColor"
+                v-model="newPlayerColor"
+                class="form-select"
+                required
+              >
+                <option value="" disabled>{{ $t("chooseColor") }}</option>
+                <option
+                  v-for="color in availableColors"
+                  :key="color.value"
+                  :value="color.value"
+                >
+                  {{ color.name }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 d-flex">
+      <div class="col-4 d-flex">
         <div class="content-box right-box">
-          <label for="rulesetSelect" class="form-label">{{
-            $t("chooseRuleset")
-          }}</label>
+          <h3 for="rulesetSelect" class="form-label">
+            {{ $t("chooseRuleset") }}
+          </h3>
           <select
             id="rulesetSelect"
             v-model="selectedRuleset"
-            class="form-select mb-3"
+            class="form-select mt-2"
             @change="setRules(selectedRuleset)"
           >
             <option
@@ -90,7 +87,7 @@
             </option>
           </select>
 
-          <router-link to="/game" class="btn btn-primary game-button">
+          <router-link to="/game" class="bierdeckel mt-auto ml-auto">
             {{ $t("startGame") }}
           </router-link>
         </div>
@@ -109,7 +106,7 @@ const { t } = useI18n();
 
 const newPlayerName = ref("");
 const newPlayerColor = ref("");
-const selectedRuleset = ref("SpiralingDown");
+const selectedRuleset = ref("spiralingDown");
 
 // Zugriff auf Farben aus dem Store
 const availableColors = computed(() => {
@@ -136,7 +133,8 @@ function removePlayer(index: number) {
   store.removePlayer(index);
 }
 
-function setRules(ruleset: any)  { // keyof typeof rules
+function setRules(ruleset: any) {
+  // keyof typeof rules
   store.setActiveRules(ruleset);
 }
 
@@ -148,15 +146,12 @@ const availableRulesets = computed(() => store.availableRulesets);
 </script>
 
 <style scoped>
+
 h2 {
   font-size: 4vh;
 }
 h4 {
-  font-size: 2vh;
-}
-.content-box {
-  display: flex;
-  flex-direction: column;
+  font-size: 3vh;
 }
 
 .right-box {
