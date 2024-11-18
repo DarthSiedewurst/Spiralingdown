@@ -4,6 +4,8 @@ import Sidebar from "./components/Sidebar.vue";
 
 <template>
   <div class="background">
+    <div id="dice-box"></div>
+
     <div
       class="gear-icon"
       data-bs-toggle="offcanvas"
@@ -15,8 +17,17 @@ import Sidebar from "./components/Sidebar.vue";
     <Sidebar />
     <router-view />
   </div>
-</template> 
+</template>
 
 <style scoped>
-
+:deep(.dice-box-canvas) {
+  position: absolute;
+  width: 90vw;
+  height: 90vh;
+  z-index: 1;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>

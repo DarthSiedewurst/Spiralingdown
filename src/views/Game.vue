@@ -1,5 +1,5 @@
 <template>
-  <table class="game-board">
+  <table @click="rollDice" class="game-board">
     <tbody>
       <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
         <td
@@ -28,11 +28,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { onMounted, computed, ref, onUnmounted } from "vue";
 import { useGameStore } from "../store/store";
-
+// @ts-ignore
+import DiceBox from "@3d-dice/dice-box";
 import Player from "@/components/Player.vue";
 
+onMounted(() => {
+  diceBox.init();
+});
+onUnmounted(() => {
+  diceBox.clear();
+});
+
+const diceBox = new DiceBox({
+  container: "#dice-box",
+  assetPath: "/dice-box/", // include the trailing backslash
+  scale: 6,
+  themeColor: "#0f4c81",
+});
+
+async function rollDice() {
+  const test = await diceBox.roll("1d6");
+  console.log(test[0].value);
+}
 const store = useGameStore();
 
 const matrix = [
@@ -108,4 +127,5 @@ body {
 .border-bottom {
   border-bottom: 3px solid #333 !important;
 }
+
 </style>

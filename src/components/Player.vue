@@ -42,8 +42,8 @@ const getColorFilter = (color: string) =>
 <style scoped>
 .player {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 2vw;
+  height: 4vh;
 }
 .player img {
   width: 100%;
