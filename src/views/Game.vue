@@ -1,5 +1,10 @@
 <template>
-  <Overlay :playerName="currentPlayer.name" :description="modalDescription" />
+  <Overlay
+    :playerName="currentPlayer.name"
+    :rule="modalRule"
+    :playerPosition="currentPlayer.position"
+    :matrix="matrix"
+  />
   <table @click="rollDice" class="game-board">
     <tbody>
       <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
@@ -106,13 +111,12 @@ const currentPosition = ref(0);
 const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
 const modalTitle = ref(""); // Modal-Titel
 const modalDescription = ref(""); // Modal-Beschreibung
+const modalRule = ref(""); // Modal-Rule
 const currentPlayer = computed(() => store.players[currentPlayerIndex.value]);
 
 const getFieldData = computed(() => (fieldId: number) => {
   return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
 });
-
-
 
 async function rollDice() {
   const currentPlayer = store.players[currentPlayerIndex.value];
@@ -125,6 +129,7 @@ async function rollDice() {
   const fieldData = getFieldData.value(currentPlayer.position);
   modalTitle.value = `Spielfeld ${currentPlayer.position}`;
   modalDescription.value = fieldData.description || "Keine Beschreibung";
+  modalRule.value = fieldData.rule || "";
 
   const modalElement = document.getElementById("staticBackdrop");
   const modal = new Modal(modalElement!);
@@ -143,7 +148,6 @@ async function rollDice() {
   // Zeige das Modal
   modal.show();
 }
-
 
 // Spiralförmige Bewegung mit Promise
 function movePlayerSpiral(player: PlayerModel, steps: number): Promise<void> {

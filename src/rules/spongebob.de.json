@@ -4,432 +4,432 @@
     "name": "Bikini Bottom",
     "description": "Eine Sondermeldung: Alle Regeln sind aufgehoben",
     "move": 0,
-    "rulerule": "-"
+    "rule": "-"
   },
   "fieldId1": {
     "name": "Ich bin bereit!",
     "description": "Ich bin bereit! Ich bin bereit! Ich bin bereit! Gehe zur Krossen Krabbe",
     "move": 9,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId2": {
     "name": "Du Stinkst",
     "description": "Du bist ja gar nicht hässlich. Trinke aus Erleichterung 2",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId3": {
     "name": "Kannst du nicht woanders dämlich sein?",
     "description": "Nein nicht vor 4. Trinke 4",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId4": {
     "name": "Ist der Finger oben, wird man dich loben",
     "description": "Der kleine Finger muss beim trinken immer erhoben sein",
     "move": 0,
-    "rulerule": "Der kleine Finger muss beim trinken immer erhoben sein"
+    "rule": "Der kleine Finger muss beim trinken immer erhoben sein"
   },
   "fieldId5": {
     "name": "Rolltreppen, Rolltreppen, Rolltreppen",
     "description": "Gehe auf Feld 34",
     "move": 29,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId6": {
     "name": "Der Hackfleischhassende Zerhacker",
     "description": "Du bist der Hackfleischhassende Zerhacker, verteile 5",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId7": {
     "name": "Ihr seid Thaddäus",
     "description": "Suche dir einen weiteren Thaddäus. Ihr trinkt immer gemeinsam. (Es gibt nur 1 Thaddäus-Paar)",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId8": {
     "name": "Mit einer Menge Fantasie",
     "description": "Wähle eine Kategorie. Im Uhrzeigersinn, nennt ein passendes Wort oder trinkt 3 Schlücke",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId9": {
     "name": "Ich mache heute Pachtey",
     "description": "Machst du heute Pachtey? Alle Trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId10": {
     "name": "Krosse Krabbe",
     "description": "Ist da die Krosse Krabbe? Nein, hier ist Patrick. Um mit der Inkompetenz deiner Kunden umzugehehn, trinke 3 ",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId11": {
     "name": "Explosion",
     "description": "DU TRINKST JETZT 2 SCHLÜCKE AUS DEINEM GLAS! WEIL DAS NÄMLICH LECKER SCHMECKT!",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId12": {
     "name": "Die Fahrschule",
     "description": "Misses Puff bläht sich auf und der Leuchtturm geht kaputt. Zahle, indem du 2 Schlücke trinkst",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId13": {
     "name": "Meerjungfraumanns Gürtel",
     "description": "M- für Mini: Deine Schlücke sind 1 Runde lang annuliert {switch} W - für Wambo: Deine Schlücke sind 1 Runde lang verdoppelt",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId14": {
     "name": "Larry",
     "description": "Du bist weit entfernt von deinem natürlichem Habitat. Gehe zur Goo-Lagoon",
     "move": 13,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId15": {
     "name": "Der Dreckige Dan",
     "description": "Wer ist der Dreckige Dan? Die letzte Person die Fingerpistolen macht, trinkt",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId16": {
     "name": "Atomflunder",
     "description": "Atomflunder ist im Ruhestand",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId17": {
     "name": "Weil ich meine Hose zerrisen hab",
     "description": "Trinke 3 um mit der Peinlichkeit umzugehen {switch} Du schmetterst einen herzzerreißenden Tophit. Alle anderen trinken 3",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId18": {
     "name": "Gegenteiltag",
     "description": "Trinke keine 2 Schlücke",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId19": {
     "name": "Keinen Führerschein",
     "description": "Fahre auf deinem Einrad in die Fahrschule",
     "move": -7,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId20": {
     "name": "Rummelplatz",
     "description": "Wir gehen auf den Rummelplatz. Wir gehen auf den Rummelplatz. Alle trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId21": {
     "name": "Hydrodynamischer Pfannenwender",
     "description": "mit Steuer- und Backbordaufsätzen und Turboantrieb. Es war nur einer auf Lager. Bist du der erste auf diesem Feld darfst du 4 verteilen, ansonsten trinke sie",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId22": {
     "name": "Kumpelblase",
     "description": "Du bist die Kumpelblase, jeder verteilt dir 1-2 Schlücke",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId23": {
     "name": "Der Schatz Des Fliegenden Holländers",
     "description": "Du erhältst einen Plastikschatz, trinke 4 {switch} Du erhältst 2 Golddublonen. Jede kannst du in Form von 2 Schlücken verteilen",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId24": {
     "name": "24",
     "description": "Vierundzwaaanzig, trinke 4",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId25": {
     "name": "25",
     "description": "Ich weiß was noch viel witzigeres als 24..........25! Verteile 2",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId26": {
     "name": "Pioniere",
     "description": "Reite auf einem Felsen 5 Felder voran",
     "move": 5,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId27": {
     "name": "Goo Lagoon",
     "description": "{playerName} ist der Rettungsschwimmer. Sie/Er ist dafür verantwortlich, dass es keine leeren Getränke gibt",
     "move": 0,
-    "rulerule": "{playerName} ist der Rettungsschwimmer. Sie/Er ist dafür verantwortlich, dass es keine leeren Getränke gibt"
+    "rule": "{playerName} ist der Rettungsschwimmer. Sie/Er ist dafür verantwortlich, dass es keine leeren Getränke gibt"
   },
   "fieldId28": {
     "name": "Tanz den Schwamm",
     "description": "Mach dein Hüpfgelenk kaputt oder trinke",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId29": {
     "name": "...Aaaaaale",
     "description": "Gehe zurück du Drecksackblase",
     "move": -29,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId30": {
     "name": "Lachgetriebe",
     "description": "Die erste Person, die lacht, muss trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId31": {
     "name": "Franks Scherzartikel-Lade",
     "description": "Du hast Unsichtbarkeitsspray verwendet. Alle anderen müssen dich eine Runde lang ignorieren",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId32": {
     "name": "Begleite Perla",
     "description": "Begleite Perla zum Abschlussball",
     "move": -4,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId33": {
     "name": "Meerjungfraumann und Blaubarschbube wieder vereint",
     "description": "Du bist Meerjungfraumann. Suche dir einen Blaubarschbuben. Ihr trinkt immer gemeinsam (Es kann imme rnur ein Superhelden-Paar geben)",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId34": {
     "name": "Klaus, Klaus, Klaus",
     "description": "{playerName} ist jetzt Klaus. Wer sie/ihn anders anspricht, bekommt Angst und muss 1 trinken.",
     "move": 0,
-    "rulerule": "{playerName} ist jetzt Klaus. Wer sie/ihn anders anspricht, bekommt Angst und muss 1 trinken."
+    "rule": "{playerName} ist jetzt Klaus. Wer sie/ihn anders anspricht, bekommt Angst und muss 1 trinken."
   },
   "fieldId35": {
     "name": "Berühren",
     "description": "Warte Giesela, ich muss dich berühren! Berühre dein/e Gegenüber innerhalb der nächsten 10 Sekunden",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId36": {
     "name": "Mr. Krabs",
     "description": "Du bist Mr Krabs. Die nächsten Schlücke sind dir zu teuer. Trinke sie nicht",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId37": {
     "name": "Abfalleimer",
     "description": "Die Burger schmecken grauenhaft. Geh lieber in die Krosse Krabbe",
     "move": -27,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId38": {
     "name": "Plan Z",
     "description": "Planktons Plan hat funktioniert. Alle trinken 2",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId39": {
     "name": "David Hasselhoff",
     "description": "{playerName} ist David Hasselhoff. Pose, wann immer möglich",
     "move": 0,
-    "rulerule": "{playerName} ist David Hasselhoff. Pose, wann immer möglich"
+    "rule": "{playerName} ist David Hasselhoff. Pose, wann immer möglich"
   },
   "fieldId40": {
     "name": "Thug Tug",
     "description": "Sprecht zusammen. Jeder der einen Fehler macht, muss trinken: Jedes blubberblasenblasende Blubberblasenbaby wird brutal und bis zur Besinnungslosigkeit durch die Bar geboxt.",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId41": {
     "name": "Quallenfelder",
     "description": "Eine Qualle hat dich gestochen. Trinke 3 Schlücke {switch} Du hast 2 Quallen gefangen. Verteile 2 Schlücke {switch} Du hast 3 Quallen gefangen. Verteile 3 Schlücke {switch} Du hast 4 Quallen gefangen. Verteile 4 Schlücke {switch} Du hast 5 Quallen gefangen. Verteile 5 Schluck {switch} Du hast Cnidaria Rex gefunden. Trinke 6 Schlücke",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId42": {
     "name": "Ankerweitwurf",
     "description": "Deine Luftarme taugen nichts, trinke 2 {switch} Du hast gewonnen du Tier! Verteile 3",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId43": {
     "name": "Die Technik",
     "description": "Die Technik bringt dich vorran. Gehe 6 Felder vor",
     "move": 4,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId44": {
     "name": "Ist Mayonnaise auch ein Instrument?",
     "description": "Nein. Meerrettich ist auch kein Instrument. Trinke 2",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId45": {
     "name": "Gary",
     "description": "Miau",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId46": {
     "name": "Karate",
     "description": "Fordere jemanden zum Schnick-Schnack-Schnuck-Spiel heraus. Der Verlierer trinkt",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId47": {
     "name": "König Neptun",
     "description": "König Neptun verleiht dir den Goldenen Pfannenwender. Verteile eine Runde alles was du trinken müsstest",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId48": {
     "name": "Geister, Geister , Weißbrot",
     "description": "Du wurdest erschreckt. Trinke 2 {switch} Du wurdest erschreckt. Trinke 3 {switch} Du bist unerschrocken. Deine Nachbarn trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId49": {
     "name": "Blubber Bernd",
     "description": "Du hast die Gürkchen unter Blubber Bernds Zunge nicht gefunden. Trinke 2 {switch} Du hast die Gürkchen unter Blubber Bernds Zunge gefunden. Verteile 2 ",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId50": {
     "name": "Salziger Spucknapf",
     "description": "Zeig, dass du hart genug bist für den Salzigen Spucknapf, indem du 3 trinkst",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId51": {
     "name": "Auf dem Rummelplatz",
     "description": "Du hast Spaß auf dem Rummelplatz und schwebst sanft wieder zurück auf den Boden",
     "move": -31,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId52": {
     "name": "Du hängst am Haken",
     "description": "Deine Thunfischdose kommt wieder am Start an",
     "move": -52,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId53": {
     "name": "Seemansknoten",
     "description": "Affenkette! Du und deine Nachbarn trinken {switch} Affenfaust! Du darfst 3 verteilen{switch} Der Affe! Alle trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId54": {
     "name": "Sandys Kuppel",
     "description": "Bei Sandy gibt es kein Wasser. Schnell! Trinke 3",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId55": {
     "name": "Turnschuhmann",
     "description": "Du bist zu schnell für den Rest. Erhalte eine Runde Immunität",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId56": {
     "name": "Elastischer Hosenbund",
     "description": "Endlich kannst du deine Zehen berühren. Feier dich mit 2 Schlücken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId57": {
     "name": "Miss Mal-so-mal-so",
     "description": "Du wirst gesehen. Trinke 3 {switch} Du bist unsichtbar. Verteile 3",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId58": {
     "name": "Captain Magmar",
     "description": "Vor jedem Trinken müsst ihr 'Krakataua' sagen",
     "move": 0,
-    "rulerule": "Vor jedem Trinken müsst ihr 'Krakataua' sagen"
+    "rule": "Vor jedem Trinken müsst ihr 'Krakataua' sagen"
   },
   "fieldId59": {
     "name": "Ich glaube ich ess meins gleich auf",
     "description": "Die erste Person, die ihr Getränk leert, darf 8 verteilen",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId60": {
     "name": "Rock Bottom",
     "description": "Trinke dir Mut an",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId61": {
     "name": "F.U.N",
     "description": "Trinkt gemeinsam 2",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId62": {
     "name": "Verbrecher",
     "description": "Als Verbrecher würdest du dir ein Eis holen. Verteile 1 Schluck {switch} Als Verbrecher würdest du dir noch ein Eis holen. Verteile 2 Schlücke ",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId63": {
     "name": "Anti-Seerhinozeros-Unterhosen",
     "description": "Du hast deine Anti-Seerhinozeros-Unterhosen nicht an. Ein Seerhinozeros jagt dich zurück zur Goo Lagoon",
     "move": -13,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId64": {
     "name": "Bist du auch Sauer?",
     "description": "Jeder, der seine Stirn nicht sehen kann, trinkt",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId65": {
     "name": "Gute-Nudel-Stern",
     "description": "Trinke für jeden Spieler der weniger Gute-Nudel-Sterne hat und somit hinter dir ist",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId66": {
     "name": "Eine Idee",
     "description": "Du nimmst einfach die Schlücke und schiebst sie woanders hin. Verteile 5",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId67": {
     "name": "Antike Suppenkelle",
     "description": "Du sollst 5 trinken. Du kannst aber nur 7 trinken",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId68": {
     "name": "Oh Kinder 3 Uhr Morgens",
     "description": "Zeit für einen Krabbenburger. Trinke 3",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId69": {
     "name": "3 Wünsche",
     "description": "Ich wünschte ich hätte das früher gewusst",
     "move": -1,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId70": {
     "name": "Magische Miesmuschel",
     "description": "Oh Magische Miesmuschel, auf welches Feld soll ich gehen?",
     "move": -99,
-    "rulerule": ""
+    "rule": ""
   },
   "fieldId71": {
     "name": "SIEG",
     "description": "",
     "move": 0,
-    "rulerule": ""
+    "rule": ""
   }
 }
