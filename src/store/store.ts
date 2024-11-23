@@ -19,7 +19,17 @@ export const useGameStore = defineStore("game", () => {
 
   const players = ref<PlayerModel[]>([
     { name: "Spieler 1", color: "yellow", position: 0 },
-    { name: "Spieler 2", color: "green", position: 0 }
+    { name: "Spieler 2", color: "green", position: 0 },
+    { name: "Spieler 3", color: "orange", position: 0 },
+    { name: "Spieler 4", color: "purple", position: 0 },
+    { name: "Spieler 5", color: "black", position: 0 },
+    { name: "Spieler 6", color: "dafuq", position: 0 },
+    { name: "Spieler 7", color: "blue", position: 0 },
+    { name: "Spieler 8", color: "aqua", position: 0 },
+    { name: "Spieler 9", color: "pink", position: 0 },
+    { name: "Spieler 10", color: "brown", position: 0 },
+    { name: "Spieler 11", color: "red", position: 0 },
+    { name: "Spieler 12", color: "white", position: 0 },
   ]);
 
   const colors = ref([
@@ -27,7 +37,7 @@ export const useGameStore = defineStore("game", () => {
       i18nKey: "colors.yellow",
       value: "yellow",
       filter:
-        "invert(79%) sepia(9%) saturate(6653%) hue-rotate(3deg) brightness(100%) contrast(103%)",
+        "invert(79%) sepia(9%) saturate(6653%) hue-rotate(20deg) brightness(100%) contrast(103%)",
     },
     {
       i18nKey: "colors.orange",

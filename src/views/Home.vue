@@ -168,4 +168,27 @@ h4 {
 .player {
   color: var(--player-color);
 }
+.bierdeckel {
+  bottom: 2vh; /* Abstand vom unteren Rand */
+  right: 2vh; /* Abstand vom rechten Rand */
+  width: 15vh; /* Größe des Buttons */
+  height: 15vh; /* Quadratisch */
+  background-image: url("@/assets/pictures/bierdeckel.jpg"); /* Hintergrundbild */
+  background-size: cover; /* Bild vollständig anzeigen */
+  background-position: center; /* Zentrieren des Bildes */
+  background-repeat: no-repeat; /* Keine Wiederholung des Bildes */
+  border: none; /* Entferne Standard-Grenzen */
+  border-radius: 50%; /* Runde den Button */
+  display: flex; /* Ermöglicht Text-Inhalt zu platzieren */
+  justify-content: center; /* Text zentrieren */
+  align-items: center; /* Text vertikal zentrieren */
+  text-decoration: none; /* Entferne Unterstreichung */
+  color: white; /* Textfarbe */
+  font-size: 2.5vh; /* Textgröße */
+  font-weight: bold; /* Fettgedruckt */
+}
+.bierdeckel:hover {
+  transform: scale(1.1); /* Animation bei Hover */
+  transition: transform 0.2s ease-in-out;
+}
 </style>

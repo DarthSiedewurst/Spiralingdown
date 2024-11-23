@@ -185,21 +185,23 @@ body {
 }
 
 .field {
-  border: 1px solid #ccc;
+  color: #333333;
   text-align: left;
   font-size: 2vh;
+  font-weight: bold;
   height: 12.5%;
   width: 11%;
   position: relative;
   background-image: url("@/assets/pictures/tilebackground.jpg");
   background-size: 100% 120%;
   background-position: center;
+  padding-left: 0.5vw;
 }
 
 .field-number {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 0.5vh;
+  left: 0.5vw;
   font-weight: bold;
 }
 

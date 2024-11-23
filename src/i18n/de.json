@@ -1,6 +1,7 @@
 {
   "title": "Spiraling Down",
   "currentPlayers": "Aktuelle Spieler",
+  "currentPlayer": "Aktueller Spieler",
   "delete": "Löschen",
   "playerName": "Spielername",
   "colorChoice": "Farbauswahl",
@@ -8,6 +9,7 @@
   "addPlayer": "Spieler hinzufügen",
   "startGame": "Starten",
   "chooseRuleset": "Regelsatz auswählen",
+  "activeRule": "Aktive Regel",
   "settings": "Einstellungen",
   "chooseLanguage": "Sprache wählen",
   "saveSettings": "Einstellungen speichern",

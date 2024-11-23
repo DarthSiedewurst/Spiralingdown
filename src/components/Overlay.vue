@@ -1,17 +1,17 @@
 <template>
   <div :class="['overlay', overlayPosition]">
     <div class="overlay-content">
-      <h3>Aktueller Spieler</h3>
+      <h3>{{ $t("currentPlayers") }}</h3>
       <p>{{ playerName }}</p>
 
-      <h4>Beschreibung</h4>
+      <h4>{{ $t("activeRule") }}</h4>
       <p>{{ rule }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 
 // Props definieren
 const props = defineProps<{
@@ -51,7 +51,7 @@ const overlayPosition = computed(() => {
   top: 0;
   width: 30vw; /* Breite des Overlays */
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Durchsichtiger Hintergrund */
+  background-color: rgba(128, 128, 128, 0.486); /* Durchsichtiger Hintergrund */
   color: white;
   padding: 20px;
   z-index: 1; /* Sicherstellen, dass es über anderen Elementen liegt */

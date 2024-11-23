@@ -1,41 +1,9 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-:root {
-  --color-red: red;
-  --color-blue: blue;
-  --color-green: green;
-  --color-yellow: yellow;
-  --color-purple: purple;
-}
-.bierdeckel {
-  bottom: 2vh; /* Abstand vom unteren Rand */
-  right: 2vh; /* Abstand vom rechten Rand */
-  width: 15vh; /* Größe des Buttons */
-  height: 15vh; /* Quadratisch */
-  background-image: url("@/assets/pictures/bierdeckel.jpg"); /* Hintergrundbild */
-  background-size: cover; /* Bild vollständig anzeigen */
-  background-position: center; /* Zentrieren des Bildes */
-  background-repeat: no-repeat; /* Keine Wiederholung des Bildes */
-  border: none; /* Entferne Standard-Grenzen */
-  border-radius: 50%; /* Runde den Button */
-  display: flex; /* Ermöglicht Text-Inhalt zu platzieren */
-  justify-content: center; /* Text zentrieren */
-  align-items: center; /* Text vertikal zentrieren */
-  text-decoration: none; /* Entferne Unterstreichung */
-  color: white; /* Textfarbe */
-  font-size: 2.5vh; /* Textgröße */
-  font-weight: bold; /* Fettgedruckt */
-}
-
 .overflow {
   overflow: auto;
   overflow-x: hidden;
-}
-
-.bierdeckel:hover {
-  transform: scale(1.1); /* Animation bei Hover */
-  transition: transform 0.2s ease-in-out;
 }
 .ml-auto {
   margin-left: auto;
@@ -75,8 +43,6 @@
   display: flex;
   flex-direction: column; /* Elemente vertikal anordnen */
   align-items: flex-start; /* Inhalt oben beginnen */
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 .container {
   width: 100%;

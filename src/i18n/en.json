@@ -1,6 +1,7 @@
 {
   "title": "Spiraling Down",
   "currentPlayers": "Current Players",
+  "currentPlayer": "Current Player",
   "delete": "Delete",
   "playerName": "Player Name",
   "colorChoice": "Color Choice",
@@ -8,6 +9,7 @@
   "addPlayer": "Add Player",
   "startGame": "Start",
   "chooseRuleset": "Choose Ruleset",
+  "activeRule": "Active rule",
   "settings": "Settings",
   "chooseLanguage": "Choose language",
   "saveSettings": "Save settings",
