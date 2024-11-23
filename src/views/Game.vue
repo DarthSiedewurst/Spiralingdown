@@ -1,4 +1,5 @@
 <template>
+  <Overlay />
   <table @click="rollDice" class="game-board">
     <tbody>
       <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
@@ -16,15 +17,49 @@
           <div class="field-number">{{ fieldId }}</div>
           <div class="field-name">{{ getFieldData(fieldId).name }}</div>
           <!-- Platzieren der Spieler auf dem aktuellen Feld -->
-          <Player
-            v-for="(player, index) in playersOnField(fieldId)"
-            :key="player.name + index"
-            :playerId="index"
-          />
         </td>
       </tr>
     </tbody>
+    <Player
+      v-for="(player, index) in store.players"
+      :key="player.name + index"
+      :playerId="index"
+    />
   </table>
+  <div
+    class="modal fade"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">...</div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +68,8 @@ import { useGameStore } from "../store/store";
 // @ts-ignore
 import DiceBox from "@3d-dice/dice-box";
 import Player from "@/components/Player.vue";
+import Overlay from "../components/Overlay.vue";
+import { PlayerModel } from "../store/interfaces";
 
 onMounted(() => {
   diceBox.init();
@@ -48,10 +85,6 @@ const diceBox = new DiceBox({
   themeColor: "#0f4c81",
 });
 
-async function rollDice() {
-  const test = await diceBox.roll("1d6");
-  console.log(test[0].value);
-}
 const store = useGameStore();
 
 const matrix = [
@@ -75,12 +108,43 @@ const borderBottom = [
 const gameData = computed(() => store.currentRuleset);
 
 const currentPosition = ref(0);
-const playersOnField = (fieldId: number) =>
-  store.players.filter((player) => player.position === fieldId);
 
 const getFieldData = computed(() => (fieldId: number) => {
   return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
 });
+
+const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
+
+async function rollDice() {
+  const currentPlayer = store.players[currentPlayerIndex.value];
+  const diceResult = await diceBox.roll("1d6");
+  const steps = diceResult[0].value; // Würfelergebnis
+
+  movePlayerSpiral(currentPlayer, steps);
+
+  // Zum nächsten Spieler wechseln
+  currentPlayerIndex.value =
+    (currentPlayerIndex.value + 1) % store.players.length;
+}
+
+// Spiralförmige Bewegung
+function movePlayerSpiral(player: PlayerModel, steps: number) {
+  const startPosition = player.position;
+  const endPosition = startPosition + steps;
+  let currentStep = startPosition;
+
+  const moveStep = () => {
+    if (currentStep < endPosition) {
+      currentStep++;
+      player.position = currentStep; // Spielerposition aktualisieren
+
+      // Wartezeit zwischen den Bewegungen
+      setTimeout(moveStep, 500); // 200ms pro Schritt
+    }
+  };
+
+  moveStep();
+}
 </script>
 
 <style scoped>
@@ -127,5 +191,4 @@ body {
 .border-bottom {
   border-bottom: 3px solid #333 !important;
 }
-
 </style>

@@ -22,9 +22,9 @@ import Sidebar from "./components/Sidebar.vue";
 <style scoped>
 :deep(.dice-box-canvas) {
   position: absolute;
-  width: 90vw;
-  height: 90vh;
-  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
   pointer-events: none;
   top: 50%;
   left: 50%;

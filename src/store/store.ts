@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import i18n from "../i18n/i18n";
 import MusicService from "../services/musicService";
+import { PlayerModel } from "./interfaces";
 
 export const useGameStore = defineStore("game", () => {
   const { locale } = useI18n(); // Zugriff auf die aktuelle Sprache
@@ -16,7 +17,10 @@ export const useGameStore = defineStore("game", () => {
 
   const musicService = new MusicService();
 
-  const players = ref<{ name: string; color: string; position: number }[]>([]);
+  const players = ref<PlayerModel[]>([
+    { name: "Spieler 1", color: "yellow", position: 0 },
+    { name: "Spieler 2", color: "green", position: 0 }
+  ]);
 
   const colors = ref([
     {

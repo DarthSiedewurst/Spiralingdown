@@ -87,7 +87,10 @@
             </option>
           </select>
 
-          <router-link to="/game" class="bierdeckel mt-auto ml-auto">
+          <router-link
+            class="bierdeckel mt-auto ml-auto"
+            :to="canStartGame ? '/game' : ''"
+          >
             {{ $t("startGame") }}
           </router-link>
         </div>
@@ -107,6 +110,7 @@ const { t } = useI18n();
 const newPlayerName = ref("");
 const newPlayerColor = ref("");
 const selectedRuleset = ref("spiralingDown");
+const canStartGame = computed(() => store.players.length >= 2);
 
 // Zugriff auf Farben aus dem Store
 const availableColors = computed(() => {
@@ -146,7 +150,6 @@ const availableRulesets = computed(() => store.availableRulesets);
 </script>
 
 <style scoped>
-
 h2 {
   font-size: 4vh;
 }
