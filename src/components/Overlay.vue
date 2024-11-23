@@ -1,13 +1,31 @@
 <template>
   <div class="overlay">
     <div class="overlay-content">
-      <slot></slot>
-      <!-- Hier können weitere Inhalte eingefügt werden -->
+      <h3>Aktueller Spieler</h3>
+      <p>{{ playerName }}</p>
+
+      <h4>Beschreibung</h4>
+      <p>{{ description }}</p>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+defineProps({
+  playerName: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+});
+</script>
+
 
 <style scoped>
 .overlay {

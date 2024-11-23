@@ -1,5 +1,5 @@
 <template>
-  <Overlay />
+  <Overlay :playerName="currentPlayer.name" :description="modalDescription" />
   <table @click="rollDice" class="game-board">
     <tbody>
       <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
@@ -35,27 +35,20 @@
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <h5 class="modal-title" id="staticBackdropLabel">{{ modalTitle }}</h5>
         </div>
-        <div class="modal-body">...</div>
+        <div class="modal-body">{{ modalDescription }}</div>
         <div class="modal-footer">
           <button
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Okay
           </button>
-          <button type="button" class="btn btn-primary">Understood</button>
         </div>
       </div>
     </div>
@@ -70,6 +63,8 @@ import DiceBox from "@3d-dice/dice-box";
 import Player from "@/components/Player.vue";
 import Overlay from "../components/Overlay.vue";
 import { PlayerModel } from "../store/interfaces";
+// @ts-ignore
+import { Modal } from "bootstrap";
 
 onMounted(() => {
   diceBox.init();
@@ -108,42 +103,67 @@ const borderBottom = [
 const gameData = computed(() => store.currentRuleset);
 
 const currentPosition = ref(0);
+const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
+const modalTitle = ref(""); // Modal-Titel
+const modalDescription = ref(""); // Modal-Beschreibung
+const currentPlayer = computed(() => store.players[currentPlayerIndex.value]);
 
 const getFieldData = computed(() => (fieldId: number) => {
   return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
 });
 
-const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
+
 
 async function rollDice() {
   const currentPlayer = store.players[currentPlayerIndex.value];
   const diceResult = await diceBox.roll("1d6");
   const steps = diceResult[0].value; // Würfelergebnis
 
-  movePlayerSpiral(currentPlayer, steps);
+  await movePlayerSpiral(currentPlayer, steps);
 
-  // Zum nächsten Spieler wechseln
-  currentPlayerIndex.value =
-    (currentPlayerIndex.value + 1) % store.players.length;
-}
+  // Setze Titel und Beschreibung für das Modal
+  const fieldData = getFieldData.value(currentPlayer.position);
+  modalTitle.value = `Spielfeld ${currentPlayer.position}`;
+  modalDescription.value = fieldData.description || "Keine Beschreibung";
 
-// Spiralförmige Bewegung
-function movePlayerSpiral(player: PlayerModel, steps: number) {
-  const startPosition = player.position;
-  const endPosition = startPosition + steps;
-  let currentStep = startPosition;
+  const modalElement = document.getElementById("staticBackdrop");
+  const modal = new Modal(modalElement!);
 
-  const moveStep = () => {
-    if (currentStep < endPosition) {
-      currentStep++;
-      player.position = currentStep; // Spielerposition aktualisieren
+  // Aktualisiere den Spieler-Index, wenn das Modal geschlossen wird
+  const onModalHide = () => {
+    currentPlayerIndex.value =
+      (currentPlayerIndex.value + 1) % store.players.length;
 
-      // Wartezeit zwischen den Bewegungen
-      setTimeout(moveStep, 500); // 200ms pro Schritt
-    }
+    // Entferne den Event-Listener, um Speicherlecks zu vermeiden
+    modalElement?.removeEventListener("hide.bs.modal", onModalHide);
   };
 
-  moveStep();
+  modalElement?.addEventListener("hide.bs.modal", onModalHide);
+
+  // Zeige das Modal
+  modal.show();
+}
+
+
+// Spiralförmige Bewegung mit Promise
+function movePlayerSpiral(player: PlayerModel, steps: number): Promise<void> {
+  return new Promise((resolve) => {
+    const startPosition = player.position;
+    const endPosition = startPosition + steps;
+    let currentStep = startPosition;
+
+    const moveStep = () => {
+      if (currentStep < endPosition) {
+        currentStep++;
+        player.position = currentStep;
+        setTimeout(moveStep, 500); // 500ms pro Schritt
+      } else {
+        resolve(); // Bewegung abgeschlossen
+      }
+    };
+
+    moveStep();
+  });
 }
 </script>
 
