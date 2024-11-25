@@ -112,6 +112,8 @@ const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
 const modalTitle = ref(""); // Modal-Titel
 const modalDescription = ref(""); // Modal-Beschreibung
 const modalRule = ref(""); // Modal-Rule
+const isRolling = ref(false); // Statusvariable, ob gerade gewürfelt wird
+
 const currentPlayer = computed(() => store.players[currentPlayerIndex.value]);
 
 const getFieldData = computed(() => (fieldId: number) => {
@@ -119,6 +121,9 @@ const getFieldData = computed(() => (fieldId: number) => {
 });
 
 async function rollDice() {
+  if (isRolling.value) return;
+  isRolling.value = true; // Würfeln wird gestartet
+
   const currentPlayer = store.players[currentPlayerIndex.value];
   const diceResult = await diceBox.roll("1d6");
   const steps = diceResult[0].value; // Würfelergebnis
@@ -138,6 +143,7 @@ async function rollDice() {
   const onModalHide = () => {
     currentPlayerIndex.value =
       (currentPlayerIndex.value + 1) % store.players.length;
+    isRolling.value = false; // Würfeln wieder erlauben
 
     // Entferne den Event-Listener, um Speicherlecks zu vermeiden
     modalElement?.removeEventListener("hide.bs.modal", onModalHide);
