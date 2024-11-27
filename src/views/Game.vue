@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, onUnmounted } from "vue";
+import { onMounted, computed, ref, onUnmounted, watch } from "vue";
 import { useGameStore } from "../store/store";
 // @ts-ignore
 import DiceBox from "@3d-dice/dice-box";
@@ -80,15 +80,21 @@ onUnmounted(() => {
   diceBox.clear();
 });
 
+const store = useGameStore();
+const { locale } = useI18n();
+
+const gameData = computed(() => store.currentRuleset);
+const currentPlayer = computed(() => store.players[currentPlayerIndex.value]);
+const getFieldData = computed(() => (fieldId: number) => {
+  return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
+});
+
 const diceBox = new DiceBox({
   container: "#dice-box",
-  assetPath: "/dice-box/", // include the trailing backslash
+  assetPath: "/dice-box/",
   scale: 6,
   themeColor: "#0f4c81",
 });
-
-const store = useGameStore();
-const { locale, messages } = useI18n(); // Zugriff auf die aktuelle Sprache
 
 const matrix = [
   [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -108,7 +114,6 @@ const borderBottom = [
 ];
 
 // Zugriff auf die aktuellen Regeln
-const gameData = computed(() => store.currentRuleset);
 
 const currentPosition = ref(0);
 const currentPlayerIndex = ref(0); // Index des aktuellen Spielers
@@ -116,24 +121,7 @@ const modalTitle = ref(""); // Modal-Titel
 const modalDescription = ref(""); // Modal-Beschreibung
 const modalRule = ref(""); // Modal-Rule
 const isRolling = ref(false); // Statusvariable, ob gerade gewürfelt wird
-
-const currentPlayer = computed(() => store.players[currentPlayerIndex.value]);
-
-const getFieldData = computed(() => (fieldId: number) => {
-  return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
-});
-
-// Eigenständige Funktion für zufällige Regel
-function getRandomRule() {
-  const allRules =
-    i18n.global.messages[locale.value as keyof typeof i18n.global.messages]
-      .rules;
-
-  if (Array.isArray(allRules) && allRules.length > 0) {
-    return allRules[Math.floor(Math.random() * allRules.length)];
-  }
-  return ""; // Fallback, falls keine Regeln verfügbar sind
-}
+let currentRuleIndex: number | null = null;
 
 async function rollDice() {
   if (isRolling.value) return; // Verhindere mehrfaches Würfeln
@@ -225,6 +213,30 @@ function movePlayerSpiral(player: PlayerModel, move: number): Promise<void> {
     }
   });
 }
+
+function getRandomRule() {
+  const allRules =
+    i18n.global.messages[locale.value as keyof typeof i18n.global.messages]
+      .rules;
+
+  if (Array.isArray(allRules) && allRules.length > 0) {
+    currentRuleIndex = Math.floor(Math.random() * allRules.length);
+    return allRules[currentRuleIndex];
+  }
+  return ""; // Fallback, falls keine Regeln verfügbar sind
+}
+
+watch(locale, () => {
+  if (currentRuleIndex !== null) {
+    const allRules =
+      i18n.global.messages[locale.value as keyof typeof i18n.global.messages]
+        .rules;
+
+    if (Array.isArray(allRules) && allRules[currentRuleIndex]) {
+      modalRule.value = allRules[currentRuleIndex];
+    }
+  }
+});
 </script>
 
 <style scoped>
