@@ -1,11 +1,10 @@
 <template>
   <div :class="['overlay', overlayPosition]">
+    <h1>{{ $t("currentPlayers") }}</h1>
+    <h2>{{ playerName }}</h2>
     <div class="overlay-content">
-      <h3>{{ $t("currentPlayers") }}</h3>
-      <p>{{ playerName }}</p>
-
-      <h4>{{ $t("activeRule") }}</h4>
-      <p>{{ rule }}</p>
+      <h1>{{ $t("activeRule") }}</h1>
+      <h2>{{ rule }}</h2>
     </div>
   </div>
 </template>
@@ -46,14 +45,21 @@ const overlayPosition = computed(() => {
 </script>
 
 <style scoped>
+h1 {
+  font-size: 6vh;
+}
+h2 {
+  font-size: 5vh;
+}
 .overlay {
+  padding-top: 10vh;
+  text-align: center;
   position: fixed;
   top: 0;
   width: 30vw; /* Breite des Overlays */
   height: 100vh;
   background-color: rgba(128, 128, 128, 0.486); /* Durchsichtiger Hintergrund */
   color: white;
-  padding: 20px;
   z-index: 1; /* Sicherstellen, dass es über anderen Elementen liegt */
   pointer-events: none;
 }
@@ -67,7 +73,11 @@ const overlayPosition = computed(() => {
 }
 
 .overlay-content {
+  margin-top: 20%;
+  justify-content: space-around; /* Vertikal zentrieren */
+  align-items: center; /* Horizontal zentrieren */
+  height: 100%; /* Nimmt die gesamte Höhe des Overlays ein */
   overflow-y: auto;
-  height: 100%;
+  text-align: center;
 }
 </style>

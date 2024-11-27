@@ -70,6 +70,8 @@ import Overlay from "../components/Overlay.vue";
 import { PlayerModel } from "../store/interfaces";
 // @ts-ignore
 import { Modal } from "bootstrap";
+import i18n from "../i18n/i18n";
+import { useI18n } from "vue-i18n";
 
 onMounted(() => {
   diceBox.init();
@@ -86,6 +88,7 @@ const diceBox = new DiceBox({
 });
 
 const store = useGameStore();
+const { locale, messages } = useI18n(); // Zugriff auf die aktuelle Sprache
 
 const matrix = [
   [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -120,59 +123,106 @@ const getFieldData = computed(() => (fieldId: number) => {
   return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
 });
 
+// Eigenständige Funktion für zufällige Regel
+function getRandomRule() {
+  const allRules =
+    i18n.global.messages[locale.value as keyof typeof i18n.global.messages]
+      .rules;
+
+  if (Array.isArray(allRules) && allRules.length > 0) {
+    return allRules[Math.floor(Math.random() * allRules.length)];
+  }
+  return ""; // Fallback, falls keine Regeln verfügbar sind
+}
+
 async function rollDice() {
-  if (isRolling.value) return;
-  isRolling.value = true; // Würfeln wird gestartet
+  if (isRolling.value) return; // Verhindere mehrfaches Würfeln
+
+  isRolling.value = true;
 
   const currentPlayer = store.players[currentPlayerIndex.value];
   const diceResult = await diceBox.roll("1d6");
-  const steps = diceResult[0].value; // Würfelergebnis
+  //const steps = diceResult[0].value;
+  const steps = 9;
 
   await movePlayerSpiral(currentPlayer, steps);
 
-  // Setze Titel und Beschreibung für das Modal
-  const fieldData = getFieldData.value(currentPlayer.position);
-  modalTitle.value = `Spielfeld ${currentPlayer.position}`;
-  modalDescription.value = fieldData.description || "Keine Beschreibung";
-  modalRule.value = fieldData.rule || "";
+  // Logik für Modals und Bewegung
+  await handleFieldInteraction(currentPlayer);
 
-  const modalElement = document.getElementById("staticBackdrop");
-  const modal = new Modal(modalElement!);
+  // Spielerwechsel
+  currentPlayerIndex.value =
+    (currentPlayerIndex.value + 1) % store.players.length;
 
-  // Aktualisiere den Spieler-Index, wenn das Modal geschlossen wird
-  const onModalHide = () => {
-    currentPlayerIndex.value =
-      (currentPlayerIndex.value + 1) % store.players.length;
-    isRolling.value = false; // Würfeln wieder erlauben
-
-    // Entferne den Event-Listener, um Speicherlecks zu vermeiden
-    modalElement?.removeEventListener("hide.bs.modal", onModalHide);
-  };
-
-  modalElement?.addEventListener("hide.bs.modal", onModalHide);
-
-  // Zeige das Modal
-  modal.show();
+  isRolling.value = false;
 }
 
-// Spiralförmige Bewegung mit Promise
-function movePlayerSpiral(player: PlayerModel, steps: number): Promise<void> {
-  return new Promise((resolve) => {
-    const startPosition = player.position;
-    const endPosition = startPosition + steps;
-    let currentStep = startPosition;
+async function handleFieldInteraction(player: PlayerModel) {
+  let fieldData = getFieldData.value(player.position);
 
-    const moveStep = () => {
-      if (currentStep < endPosition) {
-        currentStep++;
-        player.position = currentStep;
-        setTimeout(moveStep, 500); // 500ms pro Schritt
-      } else {
-        resolve(); // Bewegung abgeschlossen
-      }
+  while (fieldData.move) {
+    await showModal(fieldData);
+
+    await movePlayerSpiral(player, fieldData.move);
+
+    fieldData = getFieldData.value(player.position);
+  }
+
+  await showModal(fieldData);
+}
+
+function showModal(fieldData: any): Promise<void> {
+  return new Promise((resolve) => {
+    modalTitle.value = fieldData.name || "Kein Titel";
+    modalDescription.value = fieldData.description || "Keine Beschreibung";
+
+    if (fieldData.rule) {
+      modalRule.value =
+        fieldData.rule === "Random" ? getRandomRule() : fieldData.rule;
+    }
+
+    const modalElement = document.getElementById("staticBackdrop");
+    const modal = new Modal(modalElement!);
+
+    const onModalHide = () => {
+      modalElement?.removeEventListener("hide.bs.modal", onModalHide);
+      resolve();
     };
 
-    moveStep();
+    modalElement?.addEventListener("hide.bs.modal", onModalHide);
+
+    modal.show();
+  });
+}
+
+function movePlayerSpiral(player: PlayerModel, move: number): Promise<void> {
+  return new Promise((resolve) => {
+    const startPosition = player.position;
+    const endPosition = startPosition + move;
+
+    if (Math.abs(move) <= 6) {
+      // Schrittweise Bewegung bei großen Distanzen
+      let currentStep = startPosition;
+
+      const moveStep = () => {
+        if (
+          (move > 0 && currentStep < endPosition) ||
+          (move < 0 && currentStep > endPosition)
+        ) {
+          currentStep += move > 0 ? 1 : -1; // Vorwärts oder rückwärts bewegen
+          player.position = currentStep;
+          setTimeout(moveStep, 500); // 500ms pro Schritt
+        } else {
+          resolve(); // Bewegung abgeschlossen
+        }
+      };
+
+      moveStep();
+    } else {
+      // Direktes Springen bei kleinen Bewegungen
+      player.position = endPosition;
+      resolve(); // Bewegung abgeschlossen
+    }
   });
 }
 </script>

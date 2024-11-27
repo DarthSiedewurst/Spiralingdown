@@ -1,0 +1,15 @@
+{
+  "rules": [
+    "Die Wörter Ja und Nein werden mit einem Schluck honoriert",
+    "Der linke Nachbar trinkt mit (nicht kumulativ)",
+    "Das Wort 'Trink' belohnt dich mit einem Schluck",
+    "Du darfst keine Gegenstände mehr von anderen Personen annehmen",
+    "Bevor du würfelst, musst du das Spiel preisen",
+    "Sie sind Adlige. Sie dürfen sich nur noch vornehm ansprechen",
+    "Es darf nur mit der schwachen Hand getrunken werden",
+    "Benehmt euch! Keine Kraftausdrücke mehr",
+    "{playerName} ist Medusa. Wer ihm/ihr in die Augen sieht, der trinkt",
+    "{playerName} ist nun der Questionmaster! Jeder, der ihm/ihr Fragen beantwortet, muss seine Antwort mit den Worten 'Ja Mr. Questionmaster' beenden",
+    "Es darf nicht mehr auf andere gezeigt werden"
+  ]
+}

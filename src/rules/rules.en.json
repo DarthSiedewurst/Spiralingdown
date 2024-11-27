@@ -1,0 +1,15 @@
+{
+  "rules": [
+    "The words yes and no are honored with a sip",
+    "The left neighbor drinks with you (not cumulative)",
+    "The word 'drink' rewards you with a drink",
+    "You are no longer allowed to accept items from other people",
+    "Before you roll the dice, you must praise the game",
+    "You are nobles. You are only allowed to address each other elegantly",
+    "It is only allowed to drink with the weak hand",
+    "Behave! No more swearwords",
+    "{playerName} is Medusa. If you look him/her in the eyes, you drink",
+    "{playerName} is now the Questionmaster! Anyone who answers him/her questions must end their answer with the words 'Yes, Mr. Questionmaster'",
+    "ENGLISH"
+  ]
+}

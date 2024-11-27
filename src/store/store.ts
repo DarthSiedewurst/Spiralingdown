@@ -20,16 +20,6 @@ export const useGameStore = defineStore("game", () => {
   const players = ref<PlayerModel[]>([
     { name: "Spieler 1", color: "yellow", position: 0 },
     { name: "Spieler 2", color: "green", position: 0 },
-    { name: "Spieler 3", color: "orange", position: 0 },
-    { name: "Spieler 4", color: "purple", position: 0 },
-    { name: "Spieler 5", color: "black", position: 0 },
-    { name: "Spieler 6", color: "dafuq", position: 0 },
-    { name: "Spieler 7", color: "blue", position: 0 },
-    { name: "Spieler 8", color: "aqua", position: 0 },
-    { name: "Spieler 9", color: "pink", position: 0 },
-    { name: "Spieler 10", color: "brown", position: 0 },
-    { name: "Spieler 11", color: "red", position: 0 },
-    { name: "Spieler 12", color: "white", position: 0 },
   ]);
 
   const colors = ref([
@@ -111,7 +101,7 @@ export const useGameStore = defineStore("game", () => {
     Object.keys(
       i18n.global.messages[
         currentLocale.value as keyof typeof i18n.global.messages
-      ].rules
+      ].rulesets
     ) // Schlüsselnamen der Regelsets
   );
 
@@ -121,7 +111,7 @@ export const useGameStore = defineStore("game", () => {
     (
       i18n.global.messages[
         currentLocale.value as keyof typeof i18n.global.messages
-      ].rules as { [key: string]: any }
+      ].rulesets as { [key: string]: any }
     )["spiralingDown"]
   );
 
@@ -155,7 +145,7 @@ export const useGameStore = defineStore("game", () => {
     currentRuleset.value = (
       i18n.global.messages[
         currentLocale.value as keyof typeof i18n.global.messages
-      ].rules as { [key: string]: any }
+      ].rulesets as { [key: string]: any }
     )[activeRuleset.value];
   });
 
