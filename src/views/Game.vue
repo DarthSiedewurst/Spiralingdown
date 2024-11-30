@@ -1,6 +1,6 @@
 <template>
   <Overlay
-    :playerName="currentPlayer.name"
+    :player="currentPlayer"
     :rule="modalRule"
     :playerPosition="currentPlayer.position"
     :matrix="matrix"
@@ -40,10 +40,10 @@
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">{{ modalTitle }}</h5>
+          <h4 class="modal-title" id="staticBackdropLabel">{{ modalTitle }}</h4>
         </div>
         <div class="modal-body">{{ modalDescription }}</div>
         <div class="modal-footer">
@@ -72,6 +72,10 @@ import { PlayerModel } from "../store/interfaces";
 import { Modal } from "bootstrap";
 import i18n from "../i18n/i18n";
 import { useI18n } from "vue-i18n";
+import {
+  processDescription,
+  replacePlayerName,
+} from "../services/getDescription";
 
 onMounted(() => {
   diceBox.init();
@@ -130,13 +134,13 @@ async function rollDice() {
 
   const currentPlayer = store.players[currentPlayerIndex.value];
   const diceResult = await diceBox.roll("1d6");
-  //const steps = diceResult[0].value;
-  const steps = 9;
+  const steps = diceResult[0].value;
+  //const steps = 6;
 
   await movePlayerSpiral(currentPlayer, steps);
 
   // Logik für Modals und Bewegung
-  await handleFieldInteraction(currentPlayer);
+  await handleFieldInteraction(currentPlayer, steps);
 
   // Spielerwechsel
   currentPlayerIndex.value =
@@ -145,7 +149,7 @@ async function rollDice() {
   isRolling.value = false;
 }
 
-async function handleFieldInteraction(player: PlayerModel) {
+async function handleFieldInteraction(player: PlayerModel, steps: number) {
   let fieldData = getFieldData.value(player.position);
 
   while (fieldData.move) {
@@ -155,6 +159,12 @@ async function handleFieldInteraction(player: PlayerModel) {
 
     fieldData = getFieldData.value(player.position);
   }
+
+  fieldData.description = processDescription(
+    fieldData.description,
+    steps,
+    player.name
+  );
 
   await showModal(fieldData);
 }
@@ -167,6 +177,10 @@ function showModal(fieldData: any): Promise<void> {
     if (fieldData.rule) {
       modalRule.value =
         fieldData.rule === "Random" ? getRandomRule() : fieldData.rule;
+      modalRule.value = replacePlayerName(
+        modalRule.value,
+        currentPlayer.value.name
+      );
     }
 
     const modalElement = document.getElementById("staticBackdrop");
@@ -244,6 +258,12 @@ html,
 body {
   height: 100%;
   margin: 0;
+}
+.modal-content {
+  text-align: center;
+}
+.modal-header {
+  display: block;
 }
 
 .game-board {

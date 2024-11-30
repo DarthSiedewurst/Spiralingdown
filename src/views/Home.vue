@@ -150,13 +150,6 @@ const availableRulesets = computed(() => store.availableRulesets);
 </script>
 
 <style scoped>
-h2 {
-  font-size: 4vh;
-}
-h4 {
-  font-size: 3vh;
-}
-
 .right-box {
   display: flex;
   flex-direction: column;
@@ -183,7 +176,7 @@ h4 {
   justify-content: center; /* Text zentrieren */
   align-items: center; /* Text vertikal zentrieren */
   text-decoration: none; /* Entferne Unterstreichung */
-  color: white; /* Textfarbe */
+  color: black; /* Textfarbe */
   font-size: 2.5vh; /* Textgröße */
   font-weight: bold; /* Fettgedruckt */
 }

@@ -18,8 +18,8 @@ export const useGameStore = defineStore("game", () => {
   const musicService = new MusicService();
 
   const players = ref<PlayerModel[]>([
-    { name: "Spieler 1", color: "yellow", position: 0 },
-    { name: "Spieler 2", color: "green", position: 0 },
+    { name: "Sarbina", color: "white", position: 0 },
+    { name: "Marco", color: "orange", position: 0 },
   ]);
 
   const colors = ref([

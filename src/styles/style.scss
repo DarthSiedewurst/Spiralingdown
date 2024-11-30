@@ -1,6 +1,17 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
-
+h1 {
+  font-size: 6vw;
+}
+h2 {
+  font-size: 5vw;
+}
+h3 {
+  font-size: 4vw;
+}
+h4 {
+  font-size: 3vw;
+}
 .overflow {
   overflow: auto;
   overflow-x: hidden;
@@ -24,7 +35,7 @@
   background-size: 115% 100%;
   border: 0.1vh solid #dee2e6;
   border-radius: 5vh;
-  color: white;
+  color: black;
   height: 80vh;
 }
 
@@ -45,6 +56,7 @@
   align-items: flex-start; /* Inhalt oben beginnen */
 }
 .container {
+  text-align: center;
   width: 100%;
   max-width: 100%;
 }
