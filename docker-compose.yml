@@ -1,0 +1,18 @@
+# Spiralingdown — Trinkspiel-App (reine Vue/Vite-SPA, kein core/keine DB)
+# Laeuft analog kueche/hub: host-networking, direkt auf Host-Port 8084.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spiralingdown-web:0.1.0
+    container_name: spiralingdown-web
+    # host-network: laeuft direkt auf Port 8084 des Hosts
+    network_mode: host
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8084/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
