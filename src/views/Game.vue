@@ -4,6 +4,12 @@
   <BoardGrid @roll="rollDice" :get-field-data="getFieldData" :active-position="currentPosition">
     <Player v-for="(player, index) in store.players" :key="player.name + index" :playerId="index" />
   </BoardGrid>
+
+  <!-- Idle-Overlay: grauer Filter + "Tippe zum Würfeln" nach 30 s Inaktivität.
+       Nur sichtbar, wenn kein Modal/Roll-Kette offen und kein Winner ist. -->
+  <div v-if="idle && !winner" class="idle-hint" @click="rollDice">
+    <div class="idle-hint-message">{{ $t("tipToRoll") }}</div>
+  </div>
   <div
     class="modal fade"
     id="staticBackdrop"
@@ -293,6 +299,42 @@ watch(locale, () => {
     }
   }
 });
+
+// ------------------------------------------------------------------
+// Idle-Detection: nach 30 s ohne Roll-Kette (kein Modal offen) zeigt
+// ein leicht ausgegrautes Overlay "Tippe zum Würfeln". Click würfelt.
+// ------------------------------------------------------------------
+const IDLE_MS = 30_000;
+const idle = ref(false);
+let idleTimer: number | undefined;
+
+function resetIdle() {
+  idle.value = false;
+  if (idleTimer !== undefined) window.clearTimeout(idleTimer);
+  idleTimer = window.setTimeout(() => {
+    idle.value = true;
+  }, IDLE_MS);
+}
+
+onMounted(resetIdle);
+onUnmounted(() => {
+  if (idleTimer !== undefined) window.clearTimeout(idleTimer);
+});
+
+// Roll-Kette = "Aktivität". Solange läuft (Modal offen etc.) darf Idle nicht
+// anschlagen. Ende der Roll-Kette → Timer neu starten (30 s ab jetzt).
+// (Das Idle-Overlay selbst fängt bei Idle alle Taps ab → rollDice → rolling→true.)
+watch(
+  () => store.rolling,
+  (busy: boolean) => {
+    if (busy) {
+      idle.value = false;
+      if (idleTimer !== undefined) window.clearTimeout(idleTimer);
+    } else {
+      resetIdle();
+    }
+  },
+);
 </script>
 
 <style scoped>
@@ -323,5 +365,36 @@ body {
 }
 .modal-header {
   display: block;
+}
+
+/* Idle-Overlay: leichtes Graufenster + pulsierender Text. */
+.idle-hint {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+  user-select: none;
+}
+.idle-hint-message {
+  color: #fff;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.45);
+  animation: idle-pulse 1.8s ease-in-out infinite;
+}
+@keyframes idle-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 </style>
