@@ -15,8 +15,9 @@ Küche (8082/8083) und ist von allen Geräten im LAN erreichbar.
 | --------- | ---------------------------------- | ---------------------------------------------------------------------- |
 | UI        | Vue 3 `<script setup>`, TypeScript | Router (2 Routen), Pinia (1 Store), vue-i18n (de/en)                   |
 | 3D-Würfel | `@3d-dice/dice-box` (ammo-wasm)    | `1d6`, Assets unter `/dice-box/` (public/)                             |
-| UI-Shell  | Bootstrap 5 + Bootstrap-Icons      | Modal, Offcanvas, Dropdown; kein eigener CSS-Frame                     |
+| UI-Shell  | Bootstrap 5 + Bootstrap-Icons      | Modal, Offcanvas, Dropdown; Design-Tokens in `src/styles/tokens.scss`  |
 | Musik     | `<audio>` + Gonzales-MP3s          | `BarbaraAnn.mp3`, `iwantgonzales.mp3`, `gonzalesbrueder.mp3` (Shuffle) |
+| Sound     | Web Audio API (`soundService.ts`)  | Würfel-Klack, Lande-Pfiff, Victory; `navigator.vibrate`-Vibration      |
 | Build     | Vite 5 + `vue-tsc` Type-Check      | `npm run build` = `vue-tsc -b && vite build`                           |
 | Serve     | nginx:alpine (host-network)        | `docker compose`-Container `spiralingdown-web`                         |
 
@@ -38,9 +39,10 @@ HUB 8080/8081, Küche 8082/8083 — Spiraling Down bekommt **8084**, frei im LAN
 
 **Start-Voraussetzung:** ≥ 2 Spieler (`canStartGame`).
 
-Die App-Shell `src/App.vue` hält die ständigen Teile: `#dice-box` (Canvas),
-⚙️-Offcanvas (`Sidebar.vue`), `<router-view>`. **Nicht umbauen**, sonst brechen
-Modal + Offcanvas + Dice-Overlay gleichzeitig.
+Die App-Shell `src/layouts/AppShell.vue` hält die ständigen Teile: `#dice-box`
+(Canvas), ⚙️-Offcanvas (`Sidebar.vue`), `<router-view>`. **Nicht umbauen**,
+sonst brechen Modal + Offcanvas + Dice-Overlay gleichzeitig.
+`App.vue` selbst ist nur Mount + F5→`Home`-Redirect (Router-Guard).
 
 ## Data Model (Pinned)
 
@@ -60,11 +62,12 @@ Store-Ref-Exposition (Pinia setup-store):
 - `colors: { i18nKey, value, filter }[]` — 12 Farben (gelb/orange/grün/lila/schwarz/
   **dafuq**/blau/aqua/rosa/braun/rot/weiß); `filter` ist ein CSS-`filter`-Wert für
   das farbig eingefärbte `player.png`
-- `availableRulesets: string[]` — **wird nur einmal beim Store-Init** aus
-  `i18n.global.messages[locale].rulesets` gelesen → siehe Gotcha §"Regelset-Registry"
-- `activeRuleset: string` (default = `availableRulesets[0]` = `"spiralingDown"`)
-- `currentRuleset: { name, fieldId0..fieldId71 }` — reaktiv auf `activeRuleset`
-- `settings: { music, sound, vibration }` + `setSettings(partial)`
+- `availableRulesets: RulesetName[]` — **stabile Liste** aus `listRulesets()`
+  (Registry `src/rulesets/index.ts`). Default-Order von der Fallback-Locale `de`.
+- `activeRuleset: RulesetName` (default = `availableRulesets[0]` = `"spiralingDown"`)
+- `currentRuleset: Ruleset` — reaktiver `computed` auf `[locale, activeRuleset]`;
+  Form: `{ name: string; fields: FieldModel[] }` (Index = Feld-ID)
+- `settings: { music, sound, vibration }` + `setSettings(partial)` — **alle drei aktiv**
 
 ## Regelset-Dateien (Source of truth)
 
@@ -86,10 +89,12 @@ Store-Ref-Exposition (Pinia setup-store):
 }
 ```
 
-**Feld-ID ≠ Zug-Reihenfolge.** Die Brett-Geometrie ist hartkodiert in
-`src/views/Game.vue → matrix` (8×9, IDs 0–71 in Spiral-Reihenfolge). `fieldId`-Keys
-müssen **exakt** die Brett-ID treffen, sonst greift `getFieldData(id)` auf
-`{name:"",description:""}` zurück und das Feld ist tot.
+**Feld-ID ≠ Zug-Reihenfolge.** Die Brett-Geometrie ist zentral in
+`src/board/boardGeometry.ts` (`BOARD_MATRIX`, 8×9, IDs 0–71 in Spiral-Reihenfolge,
+
+- `BOARD_BORDER_*` Sets und `coordinatesOf(fieldId)`). `fieldId`-Keys
+  müssen **exakt** die Brett-ID treffen, sonst greift `getFieldData(id)` auf
+  `{name:"",description:""}` zurück und das Feld ist tot.
 
 ### Template-Platzhalter (in `description` / `rule`)
 
@@ -122,7 +127,7 @@ Locales ergänzen, sonst fehlen sie in einer Sprache.
      `replacePlayerName` template-aufgelöst, dann ein finales Modal.
 3. `movePlayerSpiral(player, move)` ist **bewusst asymmetrisch**:
    - `|move| <= 6` → **schrittweise** (500 ms pro Feld), animiert.
-   - `|move|  > 6` → **direkter Sprung** (`player.position = end`).
+   - `|move| > 6` → **direkter Sprung** (`player.position = end`).
      Der Code-Kommentar dazu steht _verkehrt herum_ („große Distanzen schrittweise")
      — nicht „fixen", das ist das gewollte Verhalten (Kettenbewegungen fliegen).
 4. **Kein End-Spiel.** Wenn jemand Feld 71 („SIEG") erreicht passiert nichts sonderbares —
@@ -133,43 +138,56 @@ Locales ergänzen, sonst fehlen sie in einer Sprache.
 
 ## UI/Overlay — nix umschichten
 
-- **`Player.vue`** rendert den Spieler-Titel als absolut positioniertes `img`
-  (player.png) mit `filter` aus `store.colors` und `top/left` in % aus der
-  Brett-Matrix. **Die Matrix ist hier hartkodiert** (doppelt mit `Game.vue`).
-  Wenn eine der beiden geändert wird, **muss** die andere synchron folgen.
-- **`Overlay.vue`** ist das feste 30 vw breites Seitengerüst (links/rechts, je
-  nach Spalte), das den aktuellen Spieler + aktiv laufende Regel zeigt, `pointer-events: none`.
+- **`BoardGrid.vue`** rendert das 8×9-Spielfeld als `<table>` aus
+  `boardGeometry.BOARD_MATRIX`. Alle Board-Styles (`.game-board`, `.field`,
+  `.field-number`, `.border-left|right|bottom`, `.field.active`) sind **hier** —
+  `Game.vue` rendert `<BoardGrid>` und hält **keine** Board-CSS mehr.
+- **`Player.vue`** rendert den Spieler-Token als absolut positioniertes `img`
+  (player.png) mit `filter` aus `store.colors` und `top/left` in % via
+  `coordinatesOf()` aus `boardGeometry.ts`.
+- **`Overlay.vue`** ist das feste 30 vw breite Seitengerüst (links/rechts, je
+  nach Spalte), das den aktuellen Spieler + aktiv laufende Regel zeigt,
+  `pointer-events: none` (Seite via `overlaySide(fieldId)` aus `boardGeometry`).
 - **`Sidebar.vue`** = ⚙️-Offcanvas (Bootstrap): Sprache (de/en), Musik/Sound/Vibration.
-  **Beachte:** `settings.sound` und `settings.vibration` sind **deklariert, aber
-  nirgends umgesetzt** (nur `music` greift über `musicService`). Nicht als
-  fertige Features verlinken.
-- **`App.vue`** positioniert `#dice-box` + `:deep(.dice-box-canvas)` absolut
+  Alle drei `settings.*` sind **aktiv umgesetzt**:
+  - `music` → `musicService.ts` (Gonzales-Shuffle)
+  - `sound` → `soundService.ts` (Web-Audio: Klack, Pfiff, Victory)
+  - `vibration` → `navigator.vibrate(...)` (Game.vue + rollEvent + victory)
+- **`AppShell.vue`** positioniert `#dice-box` + `:deep(.dice-box-canvas)` absolut
   über allem (`z-index: 2`, `pointer-events: none`). Canvas-Größe = 100 vw/vh.
   Brechen `z-index`/`pointer-events` weg = Modal/Clicks tot.
+- **`App.vue`** ist nur Mount (`<AppShell/>`) + F5→`Home`-Redirect-Guard
+  (`onMounted` + `router.replace`). Shell-Styles nicht hier anfassen.
 
 ## i18n / Regelset-Registry
 
-`src/i18n/i18n.ts` merge-t 8 JSONs:
+**Trennung** (wichtig):
 
-- `de.json` / `en.json` — UI-Strings + `colors`
-- `rules/rules.{de,en}.json` — Random-Regel-Pool
-- `rulesets/<id>/<id>.{de,en}.json` — je ein Regelset pro Id
+- `src/i18n/i18n.ts` hält **NUR UI-Strings** (`de.json`, `en.json`) plus
+  $t-Keys für Titel/Buttons/Farben. createI18n ist rein.
+- `src/rulesets/index.ts` ist die **typisierte Registry** für Regelsätze +
+  Random-Regeln. Sie importiert die 6 JSONs (2 Regelsets × 2 Locales + 2 Rule-Pools)
+  und stellt `listRulesets()`, `getRuleset(locale, name)`, `getRules(locale)`,
+  `isRulesetName(name)` bereit. Fallback-Locale = `de`.
+- `src/store/store.ts` verdrahtet die Registry: `availableRulesets` (aus
+  `listRulesets()`), `currentRuleset` (computed auf [locale, activeRuleset]),
+  `setRuleset(name)` (verwirft nicht-matching).
 
-**Regelset-Registry (Pinned, Gotcha):** Der Store berechnet
-`availableRulesets` **einmal beim Init** aus
-`i18n.global.messages[de].rulesets` (Standard-locale). Das heißt:
+**Neues Regelset hinzufügen** (3 Schritte):
 
-1. **Neues Regelset hinzufügen = 4 Dateien + 2 Registry-Edits**:
-   - `src/rulesets/<id>/<id>.de.json` und `.en.json` (Inhalt, `fieldId*`-IDs)
-   - `src/i18n/i18n.ts`: Importe ergänzen + in `de.rulesets` und `en.rulesets` registrieren
-   - `src/store/store.ts`: Falls das neue Regelset `availableRulesets[0]` werden
-     soll, **`activeRuleset`-Default** anpassen. Sonst bleibt es `spiralingDown`.
-2. **`availableRulesets` ist nicht reaktiv** — nach Sprachwechsel wird die
-   Liste nicht neu berechnet. Ist das Regeln-Set in einer Sprache leer, fehlt
-   es im Dropdown, obwohl die andere Sprache es hat. **Regelsets immer 1:1
-   in beiden Locales** registrieren.
-3. **Kein JSON-Schema-Validator** im Build — Tippfehler in `fieldIdN`-IDs
-   oder fehlende Felder fallen erst zur Laufzeit auf (leeres Modal, kein Fehler-Log).
+1. `src/rulesets/<id>/<id>.de.json` **und** `<id>.en.json` anlegen
+   (gleiche `fieldId*N`-IDs, gleiche Struktur — der Registry-Normalizer
+   liest **beide** Locales über die `fieldId`-Keys, nicht pro-Sprache).
+2. `src/rulesets/index.ts` editieren:
+   - die 2 JSONs importieren,
+   - in `RulesetName`-Typ ergänzen,
+   - in `RULESETS.de` und `RULESETS.en` registrieren.
+3. Optional: `activeRuleset`-Default in `src/store/store.ts` anpassen, falls
+   das neue Set `listRulesets()[0]` werden soll (sonst bleibt `spiralingDown`).
+
+**Kein i18n.ts-Edit** mehr — die registry-Getrennung ist fix.
+**Kein JSON-Schema-Validator** im Build — Tippfehler in `fieldIdN`-IDs
+oder fehlende Felder fallen erst zur Laufzeit auf (leeres Modal, kein Fehler-Log).
 
 ## Local Dev
 
@@ -178,11 +196,18 @@ npm ci
 npm run dev        # Vite, Port 5173 (Standard)
 npm run build      # vue-tsc -b && vite build  → dist/
 npm run preview    # lokale Build-Vorschau (port 4173)
+npm run lint       # prettier --check .   (Guard 2)
+npm run format     # prettier --write .   (Guard 3)
 ```
 
-**Es gibt keine Tests und keinen Linter im Repo.** `vue-tsc` im Build
-ist der einzige Guard. Bei Änderung an `Game.vue`/`Overlay.vue`/`Player.vue`
-immer `npm run build` lokal fahren, bevor push/deploy.
+**Keine Unit-/Integration-Tests** im Repo. Guards sind:
+
+1. `vue-tsc` im Build (Typfehler blockieren `npm run build`),
+2. `prettier --check` (`npm run lint`),
+3. `npm run format` bei Formatierungs-Drift.
+
+Bei Änderung an `Game.vue`/`BoardGrid.vue`/`Overlay.vue`/`Player.vue` immer
+`npm run build` lokal fahren, bevor push/deploy.
 
 ## Docker / Deploy (Raspi)
 
@@ -228,28 +253,33 @@ mit Pi-hole/HUB/Küche), Port 8084 auf 80 verschieben (Pi-hole!), `nginx.conf`
 
 ```
 src/
-  App.vue                     # Shell: #dice-box + ⚙️ + Sidebar + <router-view>
+  App.vue                     # Mount + F5→Home-Redirect (keine Shell-Logik)
   main.ts                     # createApp + pinia + i18n + router
   router/router.ts            # 2 Routen, createWebHistory (SPA-Fallback)
+  layouts/AppShell.vue        # Shell: .background, #dice-box, ⚙️, Sidebar, <router-view>
+  board/boardGeometry.ts      # BOARD_MATRIX, BORDER_*, coordinatesOf, overlaySide
   store/store.ts              # Pinia-store: players/colors/rulesets/settings
-  store/interfaces.ts         # PlayerModel
+  store/interfaces.ts         # PlayerModel, FieldModel
   views/Home.vue              # Spieler-Setup + Regelset-Picker + Start
-  views/Game.vue              # Brett, Würfel, Modal, Spielerwechsel, Random-Regel
-  components/Player.vue       # Spieler-Token auf dem Brett (matrix DUPLIKAT!)
+  views/Game.vue              # Spiel-Loop, Würfeln, Modal, Sound/Vibration, Spielerwechsel
+  components/BoardGrid.vue    # 8×9-Table + alle Board-Styles (zentral)
+  components/Player.vue       # Spieler-Token (Top/Left via boardGeometry)
   components/Overlay.vue      # Festes Seitenpanel: aktueller Spieler + Regel
-  components/Sidebar.vue      # Offcanvas: Sprache + settings (nur music aktiv)
-  i18n/{de,en}.json           # UI-Strings + colors
-  i18n/i18n.ts                # createI18n + rulesets-Registry (Gotcha!)
+  components/Sidebar.vue      # Offcanvas: Sprache + settings (music/sound/vibration)
+  i18n/{de,en}.json           # UI-Strings + colors (KEINE Regelsätze!)
+  i18n/i18n.ts                # createI18n (rein, nur UI-Strings)
   rules/rules.{de,en}.json    # Random-Regel-Pool (pro Sprache, nicht sync)
   rulesets/spiralingdown/spiralingdown.{de,en}.json
   rulesets/spongebob/spongebob.{de,en}.json
-  services/musicService.ts    # Gonzales-Shuffle, kein Audio-API-Fallback
+  rulesets/index.ts           # Registry: listRulesets/getRuleset/getRules/isRulesetName
+  services/musicService.ts    # Gonzales-Shuffle
+  services/soundService.ts    # Web-Audio: soundRoll/soundLanding/soundVictory
   services/getDescription.ts  # {PlayerName} + {switch}-Template-Engine
-  styles/style.scss           # Global Styles (vor allem .background)
+  styles/style.scss           # Global-Styles (App-Wrapper, Card, Utilities)
+  styles/tokens.scss          # Design-Tokens (Farben, Radien, Gaps, Fonts, Schatten, Z, BP)
   assets/                     # Logo, flags, player.png, musics
 public/
   dice-box/                   # @3d-dice/dice-box runtime assets (ammo.wasm, themes)
-  assets/                     # (Duplikat der Dice-Box-Assets — Vite public/)
 Dockerfile  docker-compose.yml  nginx.conf  .dockerignore
 ```
 
@@ -257,10 +287,11 @@ Dockerfile  docker-compose.yml  nginx.conf  .dockerignore
 
 - **Do:** Regelinhalte immer in `rulesets/<id>/<id>.<locale>.json` pflegen,
   nie in Vue/TS hardcoden.
-- **Do:** Neue Regelsets in **beide** Locales + `i18n.ts`-Registry (siehe Gotcha).
-- **Do:** `npm run build` vor jedem Deploy (Type-Check ist der einzige Guard).
-- **Don't:** `Player.vue`-Matrix oder `Game.vue`-Matrix ändern ohne die
-  andere zu synchronisieren.
+- **Do:** neue Regelsets in **beide** Locales **und** in `rulesets/index.ts`
+  registrieren (Typ + RULESETS.de + RULESETS.en).
+- **Do:** `npm run build` + `npm run lint` vor jedem Deploy — beide Guards.
+- **Do:** Board-Geometrie nur in `board/boardGeometry.ts` ändern; alle
+  Konsumenten (BoardGrid, Player, Overlay) ziehen von dort.
 - **Don't:** `movePlayerSpiral`'s `<=6`-Schwellwert „logisch" umkehren —
   das ist gewolltes Verhalten (Kettenbewegungen fliegen, kleine Schritte
   animieren).
@@ -268,8 +299,7 @@ Dockerfile  docker-compose.yml  nginx.conf  .dockerignore
   nutzen host-networking, das bleibt konsistent.
 - **Don't:** `public/dice-box/` aus `nginx.conf` immutable-Cache rausnehmen
   (jede Reload neu 1.3 MB).
-- **Don't:** `settings.sound`/`settings.vibration` als fertige Features
-  dokumentieren/verkaufen — nur `music` ist aktiv.
-- **Don't:** Neue Regelset mit `activeRuleset`-Default machen, wenn das
-  vorherige `spiralingDown` noch in der UI steht (Store-Init-Default bleibt
-  `spiralingDown`, bis Store neu init'd wird).
+- **Don't:** i18n.ts-Datei mit Regel-Daten befüllen — die Registry
+  (`rulesets/index.ts`) ist die einzige Quelle für Regelsätze/Random-Regeln.
+- **Don't:** `App.vue`-Template umbauen — die Shell lebt in
+  `layouts/AppShell.vue`; `App.vue` hält nur Mount + F5-Guard.
