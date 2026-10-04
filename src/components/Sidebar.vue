@@ -24,11 +24,7 @@
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <img
-            :src="`/src/assets/languages/${selectedLanguage}-flag.png`"
-            alt="Flag"
-            class="flag-icon"
-          />
+          <img :src="flags[selectedLanguage]" alt="Flag" class="flag-icon" />
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li v-if="selectedLanguage !== 'en'">
@@ -50,11 +46,7 @@
       <div class="settings-images">
         <div class="setting-item">
           <img
-            :src="
-              store.settings.music
-                ? '/src/assets/pictures/bier-voll.png'
-                : '/src/assets/pictures/bier-leer.png'
-            "
+            :src="store.settings.music ? bierVoll : bierLeer"
             alt="Music"
             class="settings-image"
             @click="toggleMusic"
@@ -63,11 +55,7 @@
         </div>
         <div class="setting-item">
           <img
-            :src="
-              store.settings.sound
-                ? '/src/assets/pictures/bier-voll.png'
-                : '/src/assets/pictures/bier-leer.png'
-            "
+            :src="store.settings.sound ? bierVoll : bierLeer"
             alt="Sound"
             class="settings-image"
             @click="toggleSound"
@@ -76,11 +64,7 @@
         </div>
         <div class="setting-item">
           <img
-            :src="
-              store.settings.vibration
-                ? '/src/assets/pictures/bier-voll.png'
-                : '/src/assets/pictures/bier-leer.png'
-            "
+            :src="store.settings.vibration ? bierVoll : bierLeer"
             alt="Vibration"
             class="settings-image"
             @click="toggleVibration"
@@ -96,8 +80,14 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useGameStore } from "../store/store";
+import bierVoll from "@/assets/pictures/bier-voll.png";
+import bierLeer from "@/assets/pictures/bier-leer.png";
+import deFlag from "@/assets/languages/de-flag.png";
+import enFlag from "@/assets/languages/en-flag.png";
 
 type AppLocale = "de" | "en";
+
+const flags: Record<AppLocale, string> = { de: deFlag, en: enFlag };
 
 // Zugriff auf i18n und Store
 const { locale } = useI18n();
