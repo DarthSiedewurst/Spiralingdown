@@ -21,7 +21,6 @@ const props = defineProps<{
   matrix: number[][];
 }>();
 
-
 // Berechnung der Position (links/rechts) des Overlays
 const overlayPosition = computed(() => {
   let columnIndex = -1;

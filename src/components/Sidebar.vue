@@ -32,30 +32,14 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li v-if="selectedLanguage !== 'en'">
-            <a
-              class="dropdown-item"
-              href="#"
-              @click.prevent="changeLanguage('en')"
-            >
-              <img
-                src="@/assets/languages/en-flag.png"
-                alt="English"
-                class="flag-icon"
-              />
+            <a class="dropdown-item" href="#" @click.prevent="changeLanguage('en')">
+              <img src="@/assets/languages/en-flag.png" alt="English" class="flag-icon" />
               English
             </a>
           </li>
           <li v-if="selectedLanguage !== 'de'">
-            <a
-              class="dropdown-item"
-              href="#"
-              @click.prevent="changeLanguage('de')"
-            >
-              <img
-                src="@/assets/languages/de-flag.png"
-                alt="Deutsch"
-                class="flag-icon"
-              />
+            <a class="dropdown-item" href="#" @click.prevent="changeLanguage('de')">
+              <img src="@/assets/languages/de-flag.png" alt="Deutsch" class="flag-icon" />
               Deutsch
             </a>
           </li>
@@ -157,7 +141,7 @@ function toggleVibration() {
   cursor: pointer;
 }
 .offcanvas.offcanvas-end {
-  width: 25vw
+  width: 25vw;
 }
 .flag-icon {
   width: 5vh;

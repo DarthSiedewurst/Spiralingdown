@@ -23,8 +23,7 @@ const gameStore = useGameStore();
 const player = computed(() => gameStore.players[props.playerId]);
 
 // Farbfilter für den Spieler, basierend auf der Farbe aus dem Store
-const getColorFilter = (color: string) =>
-  gameStore.colors.find((c) => c.value === color)?.filter;
+const getColorFilter = (color: string) => gameStore.colors.find((c) => c.value === color)?.filter;
 
 // Spielfeld-Matrix
 const matrix = [

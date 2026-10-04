@@ -1,10 +1,6 @@
 // src/helpers/descriptionHelper.ts
 
-export function processDescription(
-  description: string,
-  steps: number,
-  playerName: string
-): string {
+export function processDescription(description: string, steps: number, playerName: string): string {
   description = replacePlayerName(description, playerName);
   if (description.includes("{switch}")) {
     return getSwitchDescription(description, steps);
@@ -13,13 +9,11 @@ export function processDescription(
 }
 
 function getSwitchDescription(description: string, steps: number): string {
-  const segments = description
-    .split("{switch}")
-    .map((segment) => segment.trim());
+  const segments = description.split("{switch}").map((segment) => segment.trim());
 
   const segmentIndex = Math.min(
     Math.floor((steps - 1) / (6 / segments.length)),
-    segments.length - 1
+    segments.length - 1,
   );
 
   return segments[segmentIndex];

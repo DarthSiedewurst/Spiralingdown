@@ -11,20 +11,20 @@ Küche (8082/8083) und ist von allen Geräten im LAN erreichbar.
 
 ## Stack
 
-| Teil | Technologie | Anmerkung |
-|------|-------------|-----------|
-| UI  | Vue 3 `<script setup>`, TypeScript | Router (2 Routen), Pinia (1 Store), vue-i18n (de/en) |
-| 3D-Würfel | `@3d-dice/dice-box` (ammo-wasm) | `1d6`, Assets unter `/dice-box/` (public/) |
-| UI-Shell | Bootstrap 5 + Bootstrap-Icons | Modal, Offcanvas, Dropdown; kein eigener CSS-Frame |
-| Musik | `<audio>` + Gonzales-MP3s | `BarbaraAnn.mp3`, `iwantgonzales.mp3`, `gonzalesbrueder.mp3` (Shuffle) |
-| Build | Vite 5 + `vue-tsc` Type-Check | `npm run build` = `vue-tsc -b && vite build` |
-| Serve | nginx:alpine (host-network) | `docker compose`-Container `spiralingdown-web` |
+| Teil      | Technologie                        | Anmerkung                                                              |
+| --------- | ---------------------------------- | ---------------------------------------------------------------------- |
+| UI        | Vue 3 `<script setup>`, TypeScript | Router (2 Routen), Pinia (1 Store), vue-i18n (de/en)                   |
+| 3D-Würfel | `@3d-dice/dice-box` (ammo-wasm)    | `1d6`, Assets unter `/dice-box/` (public/)                             |
+| UI-Shell  | Bootstrap 5 + Bootstrap-Icons      | Modal, Offcanvas, Dropdown; kein eigener CSS-Frame                     |
+| Musik     | `<audio>` + Gonzales-MP3s          | `BarbaraAnn.mp3`, `iwantgonzales.mp3`, `gonzalesbrueder.mp3` (Shuffle) |
+| Build     | Vite 5 + `vue-tsc` Type-Check      | `npm run build` = `vue-tsc -b && vite build`                           |
+| Serve     | nginx:alpine (host-network)        | `docker compose`-Container `spiralingdown-web`                         |
 
 ## Ports
 
-| Service            | Host-Port | Hostname-Bezug                     |
-|--------------------|-----------|------------------------------------|
-| web (nginx)        | **8084**  | `http://192.168.178.69:8084/`      |
+| Service     | Host-Port | Hostname-Bezug                |
+| ----------- | --------- | ----------------------------- |
+| web (nginx) | **8084**  | `http://192.168.178.69:8084/` |
 
 → **Nur 1 Port** (reine statische SPA). Port 80 bleibt Pi-hole (AGENTS §14/§16),
 HUB 8080/8081, Küche 8082/8083 — Spiraling Down bekommt **8084**, frei im LAN.
@@ -33,8 +33,8 @@ HUB 8080/8081, Küche 8082/8083 — Spiraling Down bekommt **8084**, frei im LAN
 
 `src/router/router.ts` — 2 Routen:
 
-- `/`      → `src/views/Home.vue` — Spieler hinzufügen/entfernen, Regelset wählen, Start
-- `/game`  → `src/views/Game.vue` — Spielfeld 8×9, Würfeln, Modal, Player-Animation
+- `/` → `src/views/Home.vue` — Spieler hinzufügen/entfernen, Regelset wählen, Start
+- `/game` → `src/views/Game.vue` — Spielfeld 8×9, Würfeln, Modal, Player-Animation
 
 **Start-Voraussetzung:** ≥ 2 Spieler (`canStartGame`).
 
@@ -47,7 +47,11 @@ Modal + Offcanvas + Dice-Overlay gleichzeitig.
 `src/store/store.ts` + `interfaces.ts`:
 
 ```ts
-interface PlayerModel { name: string; color: string; position: number }
+interface PlayerModel {
+  name: string;
+  color: string;
+  position: number;
+}
 ```
 
 Store-Ref-Exposition (Pinia setup-store):
@@ -68,16 +72,17 @@ Store-Ref-Exposition (Pinia setup-store):
 
 ```jsonc
 {
-  "name": "Spiraling Down",           // Display-Name in UI/Home
-  "fieldId0": {                        // ← Key MÜSSTE `fieldId<N>` sein (N = Brett-ID)
+  "name": "Spiraling Down", // Display-Name in UI/Home
+  "fieldId0": {
+    // ← Key MÜSSTE `fieldId<N>` sein (N = Brett-ID)
     "name": "Start",
-    "description": "…{PlayerName}…",  // optional {PlayerName}, {switch}
-    "move": 0,                         // ±n = vorwärts/rückwärts, 0 = keine Bewegung
-    "rule": "-"                        // ""=keine, "-"=aufgehoben, "Random"=aus rules.*,
-                                       // sonst Literal-Text (wird als Regel angezeigt)
+    "description": "…{PlayerName}…", // optional {PlayerName}, {switch}
+    "move": 0, // ±n = vorwärts/rückwärts, 0 = keine Bewegung
+    "rule": "-", // ""=keine, "-"=aufgehoben, "Random"=aus rules.*,
+    // sonst Literal-Text (wird als Regel angezeigt)
   },
-  "fieldId6": { "name":"Lucky Shot", "move":24, "rule":"" },  // Sprung
-  "fieldId9": { "name":"Regel",  "move":0,  "rule":"Random" }
+  "fieldId6": { "name": "Lucky Shot", "move": 24, "rule": "" }, // Sprung
+  "fieldId9": { "name": "Regel", "move": 0, "rule": "Random" },
 }
 ```
 
@@ -118,8 +123,8 @@ Locales ergänzen, sonst fehlen sie in einer Sprache.
 3. `movePlayerSpiral(player, move)` ist **bewusst asymmetrisch**:
    - `|move| <= 6` → **schrittweise** (500 ms pro Feld), animiert.
    - `|move|  > 6` → **direkter Sprung** (`player.position = end`).
-   Der Code-Kommentar dazu steht *verkehrt herum* („große Distanzen schrittweise")
-   — nicht „fixen", das ist das gewollte Verhalten (Kettenbewegungen fliegen).
+     Der Code-Kommentar dazu steht _verkehrt herum_ („große Distanzen schrittweise")
+     — nicht „fixen", das ist das gewollte Verhalten (Kettenbewegungen fliegen).
 4. **Kein End-Spiel.** Wenn jemand Feld 71 („SIEG") erreicht passiert nichts sonderbares —
    das Feld zeigt nur ein Modal. Kein Reset-Button, kein Winner-State. Wer neu
    startet, geht manuell zurück auf `/` (Router).
@@ -190,10 +195,10 @@ services:
     build: .
     image: spiralingdown-web:0.1.0
     container_name: spiralingdown-web
-    network_mode: host       # Port 8084 direkt am Host, wie kueche-web :8082
+    network_mode: host # Port 8084 direkt am Host, wie kueche-web :8082
     restart: unless-stopped
     healthcheck:
-      test: ["CMD","wget","-q","--spider","http://127.0.0.1:8084/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8084/"]
 ```
 
 `Dockerfile` (Multi-Stage):

@@ -19,6 +19,13 @@ export const useGameStore = defineStore("game", () => {
 
   const players = ref<PlayerModel[]>([]);
 
+  // Laufender Spielstand im Store (bleibt ueber Home/Game-Wechsel erhalten,
+  // aber bewusst OHNE localStorage: nach Refresh bzw. Neustart beginnt es frisch).
+  const currentPlayerIndex = ref(0);
+  const winner = ref<string | null>(null);
+  // Wird true, sobald einmal auf /game navigiert wurde.
+  const hasPlayed = ref(false);
+
   const colors = ref([
     {
       i18nKey: "colors.yellow",
@@ -89,27 +96,24 @@ export const useGameStore = defineStore("game", () => {
     {
       i18nKey: "colors.white",
       value: "white",
-      filter:
-        "invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(200%)",
+      filter: "invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(200%)",
     },
   ]);
 
   const availableRulesets = ref<string[]>(
     Object.keys(
-      i18n.global.messages[
-        currentLocale.value as keyof typeof i18n.global.messages
-      ].rulesets
-    ) // Schlüsselnamen der Regelsets
+      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets,
+    ), // Schlüsselnamen der Regelsets
   );
 
   const activeRuleset = ref<string>(availableRulesets.value[0] || "");
 
   const currentRuleset = ref(
     (
-      i18n.global.messages[
-        currentLocale.value as keyof typeof i18n.global.messages
-      ].rulesets as { [key: string]: any }
-    )["spiralingDown"]
+      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets as {
+        [key: string]: any;
+      }
+    )[activeRuleset.value],
   );
 
   // Funktionen
@@ -132,6 +136,17 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
+  // "Neues Spiel": Alles zuruecksetzen (Spieler leeren, Regel zurueck zum
+  // Standard, Zug-Reihung und Sieger zurueckgesetzt). Settings und Sprache
+  // bleiben erhalten.
+  // "Neues Spiel": Spieler bleiben erhalten, alle Figuren zurueck an
+  // Startfeld (0), Zug-Reihung und Sieger zurueckgesetzt.
+  function restartRound() {
+    players.value.forEach((p) => (p.position = 0));
+    currentPlayerIndex.value = 0;
+    winner.value = null;
+  }
+
   // Überwachung der Sprache (optional, falls weitere Effekte gewünscht)
   watch(locale, () => {
     console.log(`Sprache geändert zu: ${locale.value}`);
@@ -140,9 +155,9 @@ export const useGameStore = defineStore("game", () => {
 
   watch([activeRuleset, currentLocale], () => {
     currentRuleset.value = (
-      i18n.global.messages[
-        currentLocale.value as keyof typeof i18n.global.messages
-      ].rulesets as { [key: string]: any }
+      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets as {
+        [key: string]: any;
+      }
     )[activeRuleset.value];
   });
 
@@ -154,7 +169,7 @@ export const useGameStore = defineStore("game", () => {
       } else {
         musicService.stopMusic(); // Musik stoppen
       }
-    }
+    },
   );
 
   return {
@@ -164,9 +179,13 @@ export const useGameStore = defineStore("game", () => {
     availableRulesets,
     activeRuleset,
     settings,
+    currentPlayerIndex,
+    winner,
+    hasPlayed,
     addPlayer,
     removePlayer,
     setActiveRules,
     setSettings,
+    restartRound,
   };
 });

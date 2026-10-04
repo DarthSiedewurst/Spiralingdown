@@ -15,50 +15,39 @@
                 :style="{ '--player-color': player.color }"
               >
                 <h4>{{ player.name }}</h4>
-                <button
-                  @click="removePlayer(index)"
-                  class="btn btn-danger btn-sm"
-                >
+                <button @click="removePlayer(index)" class="btn btn-danger btn-sm">
                   {{ $t("delete") }}
                 </button>
               </li>
             </ul>
           </div>
+          <p v-if="addError" class="text-danger fw-bold mb-1">{{ addError }}</p>
           <div class="row mb-2 mt-auto">
-            <!-- Spieler hinzufügen Button unten links -->
             <div class="col-2 mt-auto">
-              <button @click="addPlayer" class="bierdeckel">
-                {{ $t("addPlayer") }}
-              </button>
+              <button @click="addPlayer" class="bierdeckel">{{ $t("addPlayer") }}</button>
             </div>
             <div class="col-6">
-              <label for="playerName" class="form-label">{{
-                $t("playerName")
-              }}</label>
+              <label for="playerName" class="form-label">{{ $t("playerName") }}</label>
               <input
                 type="text"
                 id="playerName"
                 v-model="newPlayerName"
                 class="form-control"
+                :class="{ 'is-invalid': addError }"
                 required
               />
             </div>
             <div class="col-4">
-              <label for="playerColor" class="form-label">{{
-                $t("colorChoice")
-              }}</label>
+              <label for="playerColor" class="form-label">{{ $t("colorChoice") }}</label>
               <select
                 id="playerColor"
                 v-model="newPlayerColor"
                 class="form-select"
+                :class="{ 'is-invalid': addError }"
                 required
               >
                 <option value="" disabled>{{ $t("chooseColor") }}</option>
-                <option
-                  v-for="color in availableColors"
-                  :key="color.value"
-                  :value="color.value"
-                >
+                <option v-for="color in availableColors" :key="color.value" :value="color.value">
                   {{ color.name }}
                 </option>
               </select>
@@ -69,30 +58,42 @@
 
       <div class="col-4 d-flex">
         <div class="content-box right-box">
-          <h3 for="rulesetSelect" class="form-label">
-            {{ $t("chooseRuleset") }}
-          </h3>
+          <label class="form-label" for="rulesetSelect">{{ $t("chooseRuleset") }}</label>
           <select
             id="rulesetSelect"
             v-model="selectedRuleset"
             class="form-select mt-2"
             @change="setRules(selectedRuleset)"
           >
-            <option
-              v-for="ruleSet in availableRulesets"
-              :key="ruleSet"
-              :value="ruleSet"
-            >
+            <option v-for="ruleSet in availableRulesets" :key="ruleSet" :value="ruleSet">
               {{ ruleSet }}
             </option>
           </select>
 
-          <router-link
-            class="bierdeckel mt-auto ml-auto"
-            :to="canStartGame ? '/game' : ''"
-          >
-            {{ $t("startGame") }}
-          </router-link>
+          <p v-if="store.winner" class="text-muted mt-3">
+            {{ t("roundOverWinner", { name: store.winner }) }}
+          </p>
+          <p v-if="players.length === 0" class="text-muted mt-3">
+            {{ t("needPlayers") }}
+          </p>
+
+          <div class="buttons d-flex mt-auto justify-content-between">
+            <!-- "Neues Spiel" (unten links): nur Spielfeld zuruecksetzen, Spieler bleiben -->
+            <button
+              v-if="store.hasPlayed"
+              class="bierdeckel bierdeckel-new"
+              type="button"
+              @click="startNewGame"
+            >
+              {{ $t("newGame") }}
+            </button>
+            <span v-else></span>
+
+            <!-- "Starten"/"Weiter" (unten rechts) -->
+            <button class="bierdeckel" type="button" :disabled="!canStartGame" @click="goToGame">
+              {{ store.hasPlayed ? $t("continue") : $t("startGame") }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -103,50 +104,62 @@
 import { ref, computed } from "vue";
 import { useGameStore } from "../store/store";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const store = useGameStore();
 const { t } = useI18n();
+const router = useRouter();
 
 const newPlayerName = ref("");
 const newPlayerColor = ref("");
-const selectedRuleset = ref("spiralingDown");
+const addError = ref("");
+const selectedRuleset = ref(store.activeRuleset);
 const canStartGame = computed(() => store.players.length >= 2);
 
-// Zugriff auf Farben aus dem Store
 const availableColors = computed(() => {
   return store.colors
-    .filter(
-      (color) => !store.players.some((player) => player.color === color.value)
-    )
+    .filter((color) => !store.players.some((player) => player.color === color.value))
     .map((color) => ({
       ...color,
       name: t(color.i18nKey),
     }));
 });
 
-// Funktionen zum Hinzufügen und Entfernen von Spielern
+const players = computed(() => store.players);
+const availableRulesets = computed(() => store.availableRulesets);
+
 function addPlayer() {
-  if (newPlayerName.value && newPlayerColor.value) {
-    store.addPlayer(newPlayerName.value, newPlayerColor.value);
-    newPlayerName.value = "";
-    newPlayerColor.value = "";
+  if (!newPlayerName.value.trim() || !newPlayerColor.value) {
+    addError.value = t("playerInfoMissing");
+    return;
   }
+  store.addPlayer(newPlayerName.value.trim(), newPlayerColor.value);
+  newPlayerName.value = "";
+  newPlayerColor.value = "";
+  addError.value = "";
 }
 
 function removePlayer(index: number) {
   store.removePlayer(index);
 }
 
-function setRules(ruleset: any) {
-  // keyof typeof rules
+function setRules(ruleset: string) {
   store.setActiveRules(ruleset);
 }
 
-// Zugriff auf den reaktiven players-Zustand
-const players = computed(() => store.players);
+function goToGame() {
+  if (!canStartGame.value) return;
+  store.hasPlayed = true;
+  router.push({ name: "Game" });
+}
 
-// Zugriff auf die Liste der verfügbaren Regelsets
-const availableRulesets = computed(() => store.availableRulesets);
+function startNewGame() {
+  store.restartRound();
+  if (canStartGame.value) {
+    store.hasPlayed = true;
+    router.push({ name: "Game" });
+  }
+}
 </script>
 
 <style scoped>
@@ -157,31 +170,42 @@ const availableRulesets = computed(() => store.availableRulesets);
   padding: 1rem;
   width: 100%;
 }
-
 .player {
   color: var(--player-color);
 }
-.bierdeckel {
-  bottom: 2vh; /* Abstand vom unteren Rand */
-  right: 2vh; /* Abstand vom rechten Rand */
-  width: 15vh; /* Größe des Buttons */
-  height: 15vh; /* Quadratisch */
-  background-image: url("@/assets/pictures/bierdeckel.jpg"); /* Hintergrundbild */
-  background-size: cover; /* Bild vollständig anzeigen */
-  background-position: center; /* Zentrieren des Bildes */
-  background-repeat: no-repeat; /* Keine Wiederholung des Bildes */
-  border: none; /* Entferne Standard-Grenzen */
-  border-radius: 50%; /* Runde den Button */
-  display: flex; /* Ermöglicht Text-Inhalt zu platzieren */
-  justify-content: center; /* Text zentrieren */
-  align-items: center; /* Text vertikal zentrieren */
-  text-decoration: none; /* Entferne Unterstreichung */
-  color: black; /* Textfarbe */
-  font-size: 2.5vh; /* Textgröße */
-  font-weight: bold; /* Fettgedruckt */
+.buttons {
+  gap: 3vh;
+  align-items: center;
+  justify-content: flex-end;
 }
-.bierdeckel:hover {
-  transform: scale(1.1); /* Animation bei Hover */
+.bierdeckel {
+  width: 15vh;
+  height: 15vh;
+  background-image: url("@/assets/pictures/bierdeckel.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  font-size: 2.5vh;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bierdeckel:hover:not(:disabled) {
+  transform: scale(1.1);
   transition: transform 0.2s ease-in-out;
+}
+.bierdeckel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.bierdeckel-new {
+  background-position: top;
 }
 </style>

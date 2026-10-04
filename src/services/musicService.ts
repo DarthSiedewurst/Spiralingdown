@@ -1,7 +1,7 @@
 export default class MusicService {
   // Dynamisch alle Musikdateien importieren
   static gonzalesPlaylist = Object.values(
-    import.meta.glob("../assets/music/*.mp3", { eager: true })
+    import.meta.glob("../assets/music/*.mp3", { eager: true }),
   ).map((module: any) => module.default);
 
   // Zufälligen Track auswählen
@@ -10,9 +10,7 @@ export default class MusicService {
   }
 
   static trackNumber = MusicService.getRandomTrackNumber();
-  static gonzales = new Audio(
-    MusicService.gonzalesPlaylist[MusicService.trackNumber]
-  );
+  static gonzales = new Audio(MusicService.gonzalesPlaylist[MusicService.trackNumber]);
 
   public playMusic() {
     console.log("Tracknummer: " + MusicService.trackNumber);
@@ -33,8 +31,6 @@ export default class MusicService {
     }
     MusicService.trackNumber = newTrackNumber;
 
-    MusicService.gonzales = new Audio(
-      MusicService.gonzalesPlaylist[MusicService.trackNumber]
-    );
+    MusicService.gonzales = new Audio(MusicService.gonzalesPlaylist[MusicService.trackNumber]);
   }
 }
