@@ -35,7 +35,8 @@ HUB 8080/8081, Küche 8082/8083 — Spiraling Down bekommt **8084**, frei im LAN
 `src/router/router.ts` — 2 Routen:
 
 - `/` → `src/views/Home.vue` — Spieler hinzufügen/entfernen, Regelset wählen, Start
-- `/game` → `src/views/Game.vue` — Spielfeld 8×9, Würfeln, Modal, Player-Animation
+- `/game` → `src/views/Game.vue` — Spielfeld 8×9, Würfeln, Modal, Player-Animation,
+  Idle-Overlay nach 30 s Inaktivität
 
 **Start-Voraussetzung:** ≥ 2 Spieler (`canStartGame`).
 
@@ -91,10 +92,9 @@ Store-Ref-Exposition (Pinia setup-store):
 
 **Feld-ID ≠ Zug-Reihenfolge.** Die Brett-Geometrie ist zentral in
 `src/board/boardGeometry.ts` (`BOARD_MATRIX`, 8×9, IDs 0–71 in Spiral-Reihenfolge,
-
-- `BOARD_BORDER_*` Sets und `coordinatesOf(fieldId)`). `fieldId`-Keys
-  müssen **exakt** die Brett-ID treffen, sonst greift `getFieldData(id)` auf
-  `{name:"",description:""}` zurück und das Feld ist tot.
+`BOARD_BORDER_*` Sets, `coordinatesOf(fieldId)`). `fieldId`-Keys
+müssen **exakt** die Brett-ID treffen, sonst greift `getFieldData(id)` auf
+`{name:"",description:""}` zurück und das Feld ist tot.
 
 ### Template-Platzhalter (in `description` / `rule`)
 
@@ -130,9 +130,22 @@ Locales ergänzen, sonst fehlen sie in einer Sprache.
    - `|move| > 6` → **direkter Sprung** (`player.position = end`).
      Der Code-Kommentar dazu steht _verkehrt herum_ („große Distanzen schrittweise")
      — nicht „fixen", das ist das gewollte Verhalten (Kettenbewegungen fliegen).
-4. **Kein End-Spiel.** Wenn jemand Feld 71 („SIEG") erreicht passiert nichts sonderbares —
-   das Feld zeigt nur ein Modal. Kein Reset-Button, kein Winner-State. Wer neu
-   startet, geht manuell zurück auf `/` (Router).
+4. **Kein End-Spiel.** Wenn jemand Feld 71 („SIEG") erreicht passiert nichts
+   sonderbares — das Feld zeigt nur ein Modal. Kein Reset-Button, kein
+   Winner-State. Wer neu startet, geht manuell zurück auf `/` (Router).
+5. **Idle-Overlay** (`Game.vue`): Nach **30 s** ohne Roll-Kette greift ein
+   leicht ausgegrautes Fullscreen-Overlay (`.idle-hint`, z-index 10, unter allen
+   Modals), mit der pulsierenden Meldung **`tipToRoll`** — de: _„Tippe zum
+   Würfeln"_, en: _„Tap to roll"_.
+
+   - **Ablösung:** Der Timer startet `onMounted` und wird bei jedem
+     `store.rolling`-Fall (`false → true`) zurückgesetzt (Roll-Kette zählt als
+     Aktivität). `v-if="idle && !winner"` — wenn der Winner-Modal offen ist,
+     schlägt Idle **nicht** an.
+   - **Interaktion:** Das Overlay deckt das Board vollständig; ein Tap triggert
+     `rollDice()` direkt → `rolling=true` → Overlay weicht, Timer läuft neu.
+   - **Nicht** `pointerdown`-Global-Listener nötig — das volle Overlay fängt
+     alle Taps ab.
 
 **Spielerwechsel ist strikt rotierend.** Kein Aussetzen, kein Zweitsprung.
 
@@ -156,6 +169,12 @@ Locales ergänzen, sonst fehlen sie in einer Sprache.
 - **`AppShell.vue`** positioniert `#dice-box` + `:deep(.dice-box-canvas)` absolut
   über allem (`z-index: 2`, `pointer-events: none`). Canvas-Größe = 100 vw/vh.
   Brechen `z-index`/`pointer-events` weg = Modal/Clicks tot.
+- **`Idle-Hint`** (in der `Game.vue`-Scope, `.idle-hint`) — Fullscreen-Tap-
+  Layer nach 30 s Inaktivität: `z-index: 10` (über Board/Overlay, unter allen
+  Modals und der Gear-Icon), `position: fixed; inset: 0`, `background:
+rgba(0,0,0,0.45)`, `pointer-events: auto` (fängt Clicks ab und triggert
+  `rollDice`). Sichtbar via `v-if="idle && !winner"` — nie bei offenem
+  Winner-Modal. Siehe „Spiel-Loop (5)" oben.
 - **`App.vue`** ist nur Mount (`<AppShell/>`) + F5→`Home`-Redirect-Guard
   (`onMounted` + `router.replace`). Shell-Styles nicht hier anfassen.
 
