@@ -2,7 +2,12 @@
   <router-link to="/" class="back-to-home">{{ $t("backToHome") }}</router-link>
   <Overlay :player="currentPlayer" :rule="modalRule" :playerPosition="currentPlayer.position" />
   <BoardGrid @roll="rollDice" :get-field-data="getFieldData" :active-position="currentPosition">
-    <Player v-for="(player, index) in store.players" :key="player.name + index" :playerId="index" />
+    <Player
+      v-for="(player, index) in store.players"
+      :key="player.name + index"
+      :playerId="index"
+      @inspect="inspectEffect(store.players[index])"
+    />
   </BoardGrid>
 
   <!-- Idle-Overlay: grauer Filter + "Tippe zum Würfeln" nach 30 s Inaktivität.
@@ -29,10 +34,60 @@
           <h4 class="modal-title" id="staticBackdropLabel">{{ modalTitle }}</h4>
         </div>
         <div class="modal-body">{{ modalDescription }}</div>
+        <div v-if="currentPlayer?.effect" class="effect-hint">
+          {{
+            $t("effectHint", {
+              name: currentPlayer.name,
+              effect: $t(`effects.${currentPlayer.effect.type}`),
+              turns: currentPlayer.effect.turnsLeft,
+            })
+          }}
+        </div>
         <div class="modal-footer">
           <router-link v-if="winner" class="btn btn-warning" :to="'/'">
             {{ $t("toHome") }}
           </router-link>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ $t("okay") }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Swap-Picker: wird nach dem Swap-Feld-Modal geöffnet, Spieler wählen. -->
+  <div class="modal fade" id="swapPicker" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{ $t("swapTitle") }}</h4>
+        </div>
+        <div class="modal-body swap-picker-body">
+          <button
+            v-for="other in swapCandidates"
+            :key="other.name"
+            type="button"
+            class="btn btn-light swap-pick"
+            @click="pickSwap(other.name)"
+          >
+            {{ other.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effekt-Info: Token antippen zeigt das aktive Effekt. -->
+  <div class="modal fade" id="effectInfo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{ effectInspectedName }}</h4>
+        </div>
+        <div class="modal-body">
+          {{ effectInspected }}
+        </div>
+        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             {{ $t("okay") }}
           </button>
@@ -157,6 +212,11 @@ async function rollDice() {
     return;
   }
 
+  // Effekt des neuen aktuellen Spielers um einen eigenen Zug zählern.
+  const nextPlayer =
+    store.players[(store.currentPlayerIndex + 1) % store.players.length] ?? store.players[0];
+  if (nextPlayer) store.tickEffect(nextPlayer.name);
+
   // Spielerwechsel
   store.currentPlayerIndex = (store.currentPlayerIndex + 1) % store.players.length;
 
@@ -184,14 +244,24 @@ async function handleFieldInteraction(player: PlayerModel, steps: number) {
       return;
     }
 
-    // Kein Sprung -> Endfeld erreicht -> Beschreibung verarbeiten + zeigen.
+    // Kein Sprung -> Endfeld erreicht -> Effekt/Swap oder Beschreibung.
     if (move === 0) {
       const display: FieldModel = {
         name: field.name,
         description: processDescription(field.description, steps, player.name),
         rule: field.rule,
       };
+
+      if (field.effect) {
+        store.applyEffect(player.name, field.effect, field.effectDuration ?? 1);
+      }
+
       await showModal(display);
+
+      if (field.swap) {
+        swapPending.value = player.name;
+        await openSwapPicker();
+      }
       return;
     }
 
@@ -286,6 +356,67 @@ function movePlayerSpiral(player: PlayerModel, move: number): Promise<void> {
       resolve(); // Bewegung abgeschlossen
     }
   });
+}
+
+// ------------------------------------------------------------------
+// Swap-Auswahl: "Tausche mit..." wird zur Auswahl eines Mitspielers.
+// ------------------------------------------------------------------
+const swapPending = ref<string | null>(null);
+const swapModalRef = ref<Modal | null>(null);
+
+const swapCandidates = computed(() => {
+  const me = store.players.find((p) => p.name === swapPending.value);
+  // Nur noch mindestens 2 Spieler dürfen tauschen.
+  if (!me || store.players.length < 2) return [];
+  return store.players.filter((p) => p.name !== me.name);
+});
+
+async function openSwapPicker(): Promise<void> {
+  if (!mountedRef.value || swapCandidates.value.length === 0) return;
+  const el = document.getElementById("swapPicker");
+  if (!el) return;
+  await new Promise<void>((resolve) => {
+    const onHidden = () => resolve();
+    el.addEventListener("hidden.bs.modal", onHidden, { once: true });
+    swapModalRef.value = Modal.getOrCreateInstance(el);
+    swapModalRef.value.show();
+  });
+}
+
+function pickSwap(name: string) {
+  const idxA = store.players.findIndex((p) => p.name === swapPending.value);
+  const idxB = store.players.findIndex((p) => p.name === name);
+  if (idxA !== -1 && idxB !== -1) {
+    store.swapPositions(idxA, idxB);
+    soundLanding();
+    vibrate(60);
+  }
+  swapPending.value = null;
+  // Modal wird durch den Click auf den Player automatisch geschlossen? Nein:
+  // Bootstrap-Modal braucht ein explizites Hide — tun wir hier.
+  const el = document.getElementById("swapPicker");
+  if (el && swapModalRef.value) swapModalRef.value.hide();
+}
+
+// ------------------------------------------------------------------
+// Spieler-Token antippen: aktiv Effekt anzeigen.
+// ------------------------------------------------------------------
+const effectModalRef = ref<Modal | null>(null);
+const effectInspectedName = ref("");
+const effectInspected = ref("");
+
+function inspectEffect(player?: PlayerModel) {
+  if (!player?.effect || !mountedRef.value) return;
+  effectInspectedName.value = player.name;
+  effectInspected.value = t("effectHint", {
+    name: player.name,
+    effect: t(`effects.${player.effect.type}`),
+    turns: player.effect.turnsLeft,
+  });
+  const el = document.getElementById("effectInfo");
+  if (!el) return;
+  effectModalRef.value = Modal.getOrCreateInstance(el);
+  effectModalRef.value.show();
 }
 
 function getRandomRule() {
@@ -454,5 +585,25 @@ body {
     transform: translateY(110vh) translateX(var(--drift, 0vw)) rotate(var(--skew, 360deg));
     opacity: 0.85;
   }
+}
+
+/* Effekt-Hinweis im Feld-Modal (unter der Beschreibung). */
+.effect-hint {
+  margin-top: 1rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 204, 0, 0.18);
+  border: 1px dashed #cc9f00;
+  color: #6b5300;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Swap-Auswahl: Kacheln in 2 Spalten. */
+.swap-picker-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  text-align: center;
 }
 </style>

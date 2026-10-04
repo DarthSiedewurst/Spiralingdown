@@ -286,7 +286,9 @@
     "name": "König Neptun",
     "description": "König Neptun verleiht dir den Goldenen Pfannenwender. Verteile eine Runde alles was du trinken müsstest",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "redistribute",
+    "effectDuration": 1
   },
   "fieldId48": {
     "name": "Geister, Geister , Weißbrot",
@@ -334,7 +336,9 @@
     "name": "Turnschuhmann",
     "description": "Du bist zu schnell für den Rest. Erhalte eine Runde Immunität",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "immune",
+    "effectDuration": 1
   },
   "fieldId56": {
     "name": "Elastischer Hosenbund",

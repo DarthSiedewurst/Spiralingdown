@@ -286,7 +286,9 @@
     "name": "King Neptune",
     "description": "King Neptune gives you the golden spatula. Redistribute everything you need to drink for a round",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "redistribute",
+    "effectDuration": 1
   },
   "fieldId48": {
     "name": "Ghost, Ghost, Toast",
@@ -334,7 +336,9 @@
     "name": "The Quickster",
     "description": "You're too quick for the rest. Get a round of immunity",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "immune",
+    "effectDuration": 1
   },
   "fieldId56": {
     "name": "The Elastic Waistband",

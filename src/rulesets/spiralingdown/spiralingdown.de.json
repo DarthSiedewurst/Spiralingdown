@@ -28,7 +28,9 @@
     "name": "Doppelte Runde",
     "description": "Bis du wieder dran bist, werden deine Schlücke verdoppelt",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "double",
+    "effectDuration": 1
   },
   "fieldId5": {
     "name": "Verteile",
@@ -172,7 +174,9 @@
     "name": "Geimpft",
     "description": "Bis zu deinem nächsten Zug, musst du nicht trinken",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "immune",
+    "effectDuration": 1
   },
   "fieldId29": {
     "name": "Bye, Bye meine Liebe des Lebens",
@@ -226,7 +230,9 @@
     "name": "Postbote",
     "description": "Bis zu deinem nächsten Zug, verteilst du jeden Schluck, den du trinken müsstest",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "redistribute",
+    "effectDuration": 1
   },
   "fieldId38": {
     "name": "Touchy",
@@ -265,10 +271,11 @@
     "rule": ""
   },
   "fieldId44": {
-    "name": "Tausche mit dem letzten",
-    "description": "Glück gehabt, noch nicht implementiert",
+    "name": "Tausche mit einem anderen",
+    "description": "Wähle einen Mitspieler: ihr tauscht die Positionen auf dem Brett",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "swap": true
   },
   "fieldId45": {
     "name": "Rulebreaker",
@@ -292,7 +299,9 @@
     "name": "Double Trouble",
     "description": "Alle deine Schlücke sind verdoppelt, bis du wieder am Zug bist",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "double",
+    "effectDuration": 1
   },
   "fieldId49": {
     "name": "6 aus 49",

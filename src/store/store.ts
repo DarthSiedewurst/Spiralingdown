@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 import { getRuleset, listRulesets, isRulesetName } from "../rulesets/index";
 import type { RulesetName } from "../rulesets/index";
 import MusicService from "../services/musicService";
-import { PlayerModel } from "./interfaces";
+import { EffectType, PlayerModel } from "./interfaces";
 
 export const useGameStore = defineStore("game", () => {
   const { locale } = useI18n(); // Zugriff auf die aktuelle Sprache
@@ -145,7 +145,10 @@ export const useGameStore = defineStore("game", () => {
   // Startfeld (0), Zug-Reihung und Sieger zurueckgesetzt. Phase wird "playing"
   // (Runde wird neu gestartet).
   function restartRound() {
-    players.value.forEach((p) => (p.position = 0));
+    players.value.forEach((p) => {
+      p.position = 0;
+      p.effect = undefined;
+    });
     currentPlayerIndex.value = 0;
     winner.value = null;
     phase.value = "playing";
@@ -155,6 +158,35 @@ export const useGameStore = defineStore("game", () => {
   function setWinner(name: string) {
     winner.value = name;
     phase.value = "finished";
+  }
+
+  // Effekt auf einen Spieler legen (z.B. "double" für 1 eigenen Zug).
+  function applyEffect(playerName: string, type: EffectType, turnsLeft = 1) {
+    const player = players.value.find((p) => p.name === playerName);
+    if (player) player.effect = { type, turnsLeft: Math.max(1, turnsLeft) };
+  }
+
+  // Effekt eines Spielers um einen eigenen Zug herunterzählen;
+  // bei 0 aufheben. Rückgabe: true wenn der Effekt noch aktiv bleibt.
+  function tickEffect(playerName: string): boolean {
+    const player = players.value.find((p) => p.name === playerName);
+    if (!player || !player.effect) return false;
+    player.effect.turnsLeft -= 1;
+    if (player.effect.turnsLeft <= 0) {
+      player.effect = undefined;
+      return false;
+    }
+    return true;
+  }
+
+  // Positionen zweier Spieler tauschen (Feld-44 "Tausche mit...").
+  function swapPositions(idxA: number, idxB: number) {
+    const a = players.value[idxA];
+    const b = players.value[idxB];
+    if (!a || !b || idxA === idxB) return;
+    const pos = a.position;
+    a.position = b.position;
+    b.position = pos;
   }
 
   // Sprache uebernehmen, damit currentRuleset (computed) neu laest.
@@ -190,5 +222,8 @@ export const useGameStore = defineStore("game", () => {
     setSettings,
     restartRound,
     setWinner,
+    applyEffect,
+    tickEffect,
+    swapPositions,
   };
 });

@@ -31,6 +31,13 @@
   "roundOverHint": "Round is over.",
   "roundOverWinner": "Winner: {name}",
   "tipToRoll": "Tap to roll",
+  "effectHint": "{name} is active: {effect} ({turns}) — token is glowing. Tap for details.",
+  "swapTitle": "Who do you want to swap with?",
+  "effects": {
+    "double": "Double sips",
+    "immune": "Immunity (no drinking)",
+    "redistribute": "Redistribute (share every sip)"
+  },
   "settings": "Settings",
   "chooseLanguage": "Choose language",
   "saveSettings": "Save settings",

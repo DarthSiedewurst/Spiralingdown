@@ -28,7 +28,9 @@
     "name": "Double round",
     "description": "Until it's your turn again, your sips are doubled",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "double",
+    "effectDuration": 1
   },
   "fieldId5": {
     "name": "Distribute",
@@ -172,7 +174,9 @@
     "name": "Vaccinated",
     "description": "Until your next turn, you don't have to drink",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "immune",
+    "effectDuration": 1
   },
   "fieldId29": {
     "name": "Bye, bye my love of life",
@@ -226,7 +230,9 @@
     "name": "Postman",
     "description": "Until your next turn, you hand out every sip you need to drink",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "redistribute",
+    "effectDuration": 1
   },
   "fieldId38": {
     "name": "Touchy",
@@ -265,10 +271,11 @@
     "rule": ""
   },
   "fieldId44": {
-    "name": "Swap with the last one",
-    "description": "Lucky. Not implemented yet",
+    "name": "Swap with someone",
+    "description": "Pick another player: you two swap your positions on the board",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "swap": true
   },
   "fieldId45": {
     "name": "Rulebreaker",
@@ -292,7 +299,9 @@
     "name": "Double Trouble",
     "description": "All your sips are doubled until it's your turn again",
     "move": 0,
-    "rule": ""
+    "rule": "",
+    "effect": "double",
+    "effectDuration": 1
   },
   "fieldId49": {
     "name": "6 out of 49",

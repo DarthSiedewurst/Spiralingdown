@@ -31,6 +31,13 @@
   "roundOverHint": "Runde ist beendet.",
   "roundOverWinner": "Sieger: {name}",
   "tipToRoll": "Tippe zum Würfeln",
+  "effectHint": "{name} ist aktiv: {effect} ({turns}) — Token leuchtet. Antippen für Details.",
+  "swapTitle": "Wen willst du tauschen?",
+  "effects": {
+    "double": "Doppelt schlucken",
+    "immune": "Immunität (nichts trinken)",
+    "redistribute": "Verteilen (jeden Schluck teilen)"
+  },
   "settings": "Einstellungen",
   "chooseLanguage": "Sprache wählen",
   "saveSettings": "Einstellungen speichern",
