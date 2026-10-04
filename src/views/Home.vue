@@ -80,7 +80,7 @@
           <div class="buttons d-flex mt-auto justify-content-between">
             <!-- "Neues Spiel" (unten links): nur Spielfeld zuruecksetzen, Spieler bleiben -->
             <button
-              v-if="store.hasPlayed"
+              v-if="store.phase !== 'setup'"
               class="bierdeckel bierdeckel-new"
               type="button"
               @click="startNewGame"
@@ -91,7 +91,7 @@
 
             <!-- "Starten"/"Weiter" (unten rechts) -->
             <button class="bierdeckel" type="button" :disabled="!canStartGame" @click="goToGame">
-              {{ store.hasPlayed ? $t("continue") : $t("startGame") }}
+              {{ store.phase !== "setup" ? $t("continue") : $t("startGame") }}
             </button>
           </div>
         </div>
@@ -149,20 +149,21 @@ function setRules(ruleset: string) {
 
 function goToGame() {
   if (!canStartGame.value) return;
-  store.hasPlayed = true;
+  store.phase = "playing";
   router.push({ name: "Game" });
 }
 
 function startNewGame() {
   store.restartRound();
   if (canStartGame.value) {
-    store.hasPlayed = true;
     router.push({ name: "Game" });
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "../styles/tokens" as t;
+
 .right-box {
   display: flex;
   flex-direction: column;
@@ -174,25 +175,25 @@ function startNewGame() {
   color: var(--player-color);
 }
 .buttons {
-  gap: 3vh;
+  gap: t.$gap;
   align-items: center;
   justify-content: flex-end;
 }
 .bierdeckel {
-  width: 15vh;
-  height: 15vh;
-  background-image: url("@/assets/pictures/bierdeckel.jpg");
+  width: t.$bier-d;
+  height: t.$bier-d;
+  background-image: t.$board-bierdeckel;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border: none;
-  border-radius: 50%;
+  border-radius: t.$radius-circle;
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
   color: black;
-  font-size: 2.5vh;
+  font-size: t.$font-coin;
   font-weight: bold;
   cursor: pointer;
   flex-shrink: 0;

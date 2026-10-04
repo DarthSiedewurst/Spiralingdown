@@ -1,33 +1,9 @@
 <template>
   <router-link to="/" class="back-to-home">{{ $t("backToHome") }}</router-link>
-  <Overlay
-    :player="currentPlayer"
-    :rule="modalRule"
-    :playerPosition="currentPlayer.position"
-    :matrix="matrix"
-  />
-  <table @click="rollDice" class="game-board">
-    <tbody>
-      <tr v-for="(row, rowIndex) in matrix" :key="'row-' + rowIndex">
-        <td
-          v-for="fieldId in row"
-          :key="'col-' + fieldId"
-          class="field"
-          :class="{
-            active: currentPosition === fieldId,
-            'border-left': borderLeft.includes(fieldId),
-            'border-right': borderRight.includes(fieldId),
-            'border-bottom': borderBottom.includes(fieldId),
-          }"
-        >
-          <div class="field-number">{{ fieldId }}</div>
-          <div class="field-name">{{ getFieldData(fieldId).name }}</div>
-          <!-- Platzieren der Spieler auf dem aktuellen Feld -->
-        </td>
-      </tr>
-    </tbody>
+  <Overlay :player="currentPlayer" :rule="modalRule" :playerPosition="currentPlayer.position" />
+  <BoardGrid @roll="rollDice" :get-field-data="getFieldData" :active-position="currentPosition">
     <Player v-for="(player, index) in store.players" :key="player.name + index" :playerId="index" />
-  </table>
+  </BoardGrid>
   <div
     class="modal fade"
     id="staticBackdrop"
@@ -60,11 +36,12 @@ import { useGameStore } from "../store/store";
 // @ts-ignore
 import DiceBox from "@3d-dice/dice-box";
 import Player from "@/components/Player.vue";
+import BoardGrid from "../components/BoardGrid.vue";
 import Overlay from "../components/Overlay.vue";
-import { PlayerModel } from "../store/interfaces";
+import { PlayerModel, FieldModel } from "../store/interfaces";
 // @ts-ignore
 import { Modal } from "bootstrap";
-import i18n from "../i18n/i18n";
+import { getRules } from "../rulesets/index";
 import { useI18n } from "vue-i18n";
 import { processDescription, replacePlayerName } from "../services/getDescription";
 import { soundRoll, soundLanding, soundVictory } from "../services/soundService";
@@ -75,11 +52,18 @@ function vibrate(pattern: number | number[]) {
   }
 }
 
+// true, solange diese View gemountet ist. Wird false bei Navigation weg;
+// laeuft dann die Roll-Kette weiter, bricht sie ihre Aenderungen ab.
+const mountedRef = ref(true);
+
 onMounted(() => {
   diceBox.init();
+  mountedRef.value = true;
 });
 onUnmounted(() => {
   diceBox.clear();
+  mountedRef.value = false;
+  if (store.rolling) store.rolling = false; // Roll-Kette darf hier nicht mehr laufen
 });
 
 const store = useGameStore();
@@ -91,8 +75,9 @@ const currentPlayer = computed(
     store.players[store.currentPlayerIndex % Math.max(1, store.players.length)] ?? store.players[0],
 );
 const winner = computed(() => store.winner);
-const getFieldData = computed(() => (fieldId: number) => {
-  return gameData.value?.[`fieldId${fieldId}`] || { name: "", description: "" };
+const getFieldData = computed(() => (fieldId: number): FieldModel => {
+  const field = gameData.value.fields?.[fieldId];
+  return (field ?? { name: "" }) as FieldModel;
 });
 
 const diceBox = new DiceBox({
@@ -102,38 +87,21 @@ const diceBox = new DiceBox({
   themeColor: "#0f4c81",
 });
 
-const matrix = [
-  [0, 1, 2, 3, 4, 5, 6, 7, 8],
-  [29, 30, 31, 32, 33, 34, 35, 36, 9],
-  [28, 51, 52, 53, 54, 55, 56, 37, 10],
-  [27, 50, 65, 66, 67, 68, 57, 38, 11],
-  [26, 49, 64, 71, 70, 69, 58, 39, 12],
-  [25, 48, 63, 62, 61, 60, 59, 40, 13],
-  [24, 47, 46, 45, 44, 43, 42, 41, 14],
-  [23, 22, 21, 20, 19, 18, 17, 16, 15],
-];
-const borderLeft = [47, 48, 49, 50, 51, 63, 64, 65, 71];
-const borderRight = [36, 37, 38, 39, 40, 41, 56, 57, 58, 59, 68, 69];
-const borderBottom = [
-  0, 1, 2, 3, 4, 5, 6, 7, 41, 42, 43, 44, 45, 46, 47, 30, 31, 32, 33, 34, 35, 59, 60, 61, 62, 63,
-  52, 53, 54, 55, 69, 70, 71, 66, 67,
-];
-
 // Zugriff auf die aktuellen Regeln
 
-const currentPosition = ref(0);
+// Aktuelles Feld des aktiven Spielers — markieren im Board (highlight).
+const currentPosition = computed(() => currentPlayer.value?.position ?? -1);
 const modalTitle = ref(""); // Modal-Titel
 const modalDescription = ref(""); // Modal-Beschreibung
 const modalRule = ref(""); // Modal-Rule
-const isRolling = ref(false); // Statusvariable, ob gerade gewürfelt wird
 const WINNER_FIELD = 71; // innste Kachel (72. Feld, z.b. "SIEG" im Regelsatz)
 let currentRuleIndex: number | null = null;
 
 async function rollDice() {
-  if (isRolling.value || winner.value) return; // Verhindere mehrfaches Würfeln
+  if (store.rolling || winner.value) return; // Verhindere mehrfaches Würfeln
   if (store.players.length === 0) return;
 
-  isRolling.value = true;
+  store.rolling = true;
 
   const current = store.players[store.currentPlayerIndex];
   if (store.settings.sound) {
@@ -145,16 +113,27 @@ async function rollDice() {
   const steps = diceResult[0].value;
   //const steps = 6;
 
+  const abort = () => {
+    if (!mountedRef.value) {
+      store.rolling = false;
+      return true;
+    }
+    return false;
+  };
+
   await movePlayerSpiral(current, steps);
+  if (abort()) return;
   if (store.settings.sound) soundLanding();
   vibrate(80);
 
   // Logik für Modals und Bewegung
   await handleFieldInteraction(current, steps);
+  if (abort()) return;
 
-  // Sieg: wer Feld 72 erreicht, gewinnt — kein weiterer Zug
+  // Sieg: wer das innste Feld erreicht, gewinnt — kein weiterer Zug
   if (current.position >= WINNER_FIELD) {
-    store.winner = current.name;
+    store.setWinner(current.name);
+    store.rolling = false;
     if (store.settings.sound) soundVictory();
     if (store.settings.vibration && typeof navigator !== "undefined" && "vibrate" in navigator) {
       navigator.vibrate([200, 100, 200, 100, 400]);
@@ -169,26 +148,58 @@ async function rollDice() {
   // Spielerwechsel
   store.currentPlayerIndex = (store.currentPlayerIndex + 1) % store.players.length;
 
-  isRolling.value = false;
+  store.rolling = false;
 }
 
 async function handleFieldInteraction(player: PlayerModel, steps: number) {
-  let fieldData = getFieldData.value(player.position);
+  // Sicherheitsnetz gegen fehlerhafte Regeldaten: Kette kann theoretisch im
+  // Kreis laufen. -> harte Obergrenze + Abbruch beim Wiederkommen, damit die
+  // App nie hngt.
+  const fieldCount = Math.max(1, store.currentRuleset?.fields?.length ?? 1);
+  const maxSteps = fieldCount + 5;
+  const visited = new Set<number>();
 
-  while (fieldData.move) {
-    await showModal(fieldData);
+  let fieldId = player.position;
+  let guard = 0;
 
-    await movePlayerSpiral(player, fieldData.move);
+  while (true) {
+    if (!mountedRef.value) return; // View ist weg -> Kette nicht weiterfuehren.
+    const field = getFieldData.value(fieldId);
+    const move = typeof field.move === "number" && field.move !== 0 ? field.move : 0;
 
-    fieldData = getFieldData.value(player.position);
+    if (visited.has(fieldId) || guard > maxSteps) {
+      console.warn(`Regel-Kette bricht bei Feld ${fieldId} ab (Zirkel/zu lang).`);
+      return;
+    }
+
+    // Kein Sprung -> Endfeld erreicht -> Beschreibung verarbeiten + zeigen.
+    if (move === 0) {
+      const display: FieldModel = {
+        name: field.name,
+        description: processDescription(field.description, steps, player.name),
+        rule: field.rule,
+      };
+      await showModal(display);
+      return;
+    }
+
+    visited.add(fieldId);
+    guard++;
+
+    // Zwischensprung anzeigen, dann weiter bewegen.
+    await showModal(field);
+    if (!mountedRef.value) return;
+    await movePlayerSpiral(player, move);
+    if (!mountedRef.value) return;
+    fieldId = player.position;
   }
-
-  fieldData.description = processDescription(fieldData.description, steps, player.name);
-
-  await showModal(fieldData);
 }
 
-function showModal(fieldData: any): Promise<void> {
+function showModal(fieldData: FieldModel): Promise<void> {
+  // View ist nicht mehr gemountet (Navigation weg): sofort auflösen, damit die
+  // Roll-Kette nicht ueber ein fehlendes Element aendert bzw. haengt.
+  if (!mountedRef.value) return Promise.resolve();
+
   return new Promise((resolve) => {
     modalTitle.value = fieldData.name || "Kein Titel";
     modalDescription.value = fieldData.description || "Keine Beschreibung";
@@ -199,6 +210,10 @@ function showModal(fieldData: any): Promise<void> {
     }
 
     const modalElement = document.getElementById("staticBackdrop");
+    if (!modalElement) {
+      resolve();
+      return;
+    }
 
     // Erst beim "hidden" (Transition FERTIG) auflösen:
     // "hide" feuert nur beim Start des Ausblendens — löst man dort auf, startet
@@ -206,9 +221,8 @@ function showModal(fieldData: any): Promise<void> {
     // überstehenem transitionend-Callback sofort wieder weggerissen (Feld-30-Bug).
     // Eine wiederverwendete Modal-Instanz verhindert konkurrierende Instanzen.
     const onHidden = () => resolve();
-    modalElement?.addEventListener("hidden.bs.modal", onHidden, { once: true });
-
-    Modal.getOrCreateInstance(modalElement!).show();
+    modalElement.addEventListener("hidden.bs.modal", onHidden, { once: true });
+    Modal.getOrCreateInstance(modalElement).show();
   });
 }
 
@@ -237,6 +251,10 @@ function movePlayerSpiral(player: PlayerModel, move: number): Promise<void> {
       let currentStep = startPosition;
 
       const moveStep = () => {
+        if (!mountedRef.value) {
+          resolve();
+          return;
+        }
         if (
           (direction > 0 && currentStep < endPosition) ||
           (direction < 0 && currentStep > endPosition)
@@ -259,21 +277,19 @@ function movePlayerSpiral(player: PlayerModel, move: number): Promise<void> {
 }
 
 function getRandomRule() {
-  const allRules = i18n.global.messages[locale.value as keyof typeof i18n.global.messages].rules;
-
-  if (Array.isArray(allRules) && allRules.length > 0) {
+  const allRules = getRules(locale.value);
+  if (allRules.length > 0) {
     currentRuleIndex = Math.floor(Math.random() * allRules.length);
-    return allRules[currentRuleIndex];
+    return allRules[currentRuleIndex] ?? "";
   }
   return ""; // Fallback, falls keine Regeln verfügbar sind
 }
 
 watch(locale, () => {
   if (currentRuleIndex !== null) {
-    const allRules = i18n.global.messages[locale.value as keyof typeof i18n.global.messages].rules;
-
-    if (Array.isArray(allRules) && allRules[currentRuleIndex]) {
-      modalRule.value = allRules[currentRuleIndex];
+    const rule = getRules(locale.value)[currentRuleIndex];
+    if (rule) {
+      modalRule.value = rule;
     }
   }
 });
@@ -307,45 +323,5 @@ body {
 }
 .modal-header {
   display: block;
-}
-
-.game-board {
-  width: 100vw;
-  height: 100vh;
-  border-collapse: collapse;
-}
-
-.field {
-  color: #333333;
-  text-align: left;
-  font-size: 2vh;
-  font-weight: bold;
-  height: 12.5%;
-  width: 11%;
-  position: relative;
-  background-image: url("@/assets/pictures/tilebackground.jpg");
-  background-size: 100% 120%;
-  background-position: center;
-  padding-left: 0.5vw;
-}
-
-.field-number {
-  position: absolute;
-  top: 0.5vh;
-  left: 0.5vw;
-  font-weight: bold;
-}
-
-.field.active {
-  background-color: rgba(240, 248, 255, 0.5);
-}
-.border-left {
-  border-left: 3px solid #333 !important;
-}
-.border-right {
-  border-right: 3px solid #333 !important;
-}
-.border-bottom {
-  border-bottom: 3px solid #333 !important;
 }
 </style>

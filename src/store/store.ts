@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import i18n from "../i18n/i18n";
+import { getRuleset, listRulesets, isRulesetName } from "../rulesets/index";
+import type { RulesetName } from "../rulesets/index";
 import MusicService from "../services/musicService";
 import { PlayerModel } from "./interfaces";
 
@@ -23,8 +24,16 @@ export const useGameStore = defineStore("game", () => {
   // aber bewusst OHNE localStorage: nach Refresh bzw. Neustart beginnt es frisch).
   const currentPlayerIndex = ref(0);
   const winner = ref<string | null>(null);
-  // Wird true, sobald einmal auf /game navigiert wurde.
-  const hasPlayed = ref(false);
+
+  // Phase des Spiels. "setup" = noch keine Runde gestartet. "playing"/"finished"
+  // ersetzen das frühere `hasPlayed`-Boole (Single Source of Truth).
+  type Phase = "setup" | "playing" | "finished";
+  const phase = ref<Phase>("setup");
+
+  // true, während gerade eine Roll-Kette läuft. Im Store (nicht view-lokal),
+  // damit der "Double-Wurf"-Guard und der Abort bei Navigation an der gleichen
+  // Stelle hängen.
+  const rolling = ref(false);
 
   const colors = ref([
     {
@@ -100,21 +109,13 @@ export const useGameStore = defineStore("game", () => {
     },
   ]);
 
-  const availableRulesets = ref<string[]>(
-    Object.keys(
-      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets,
-    ), // Schlüsselnamen der Regelsets
-  );
+  // Verfügbare Regelsatz-Namen (Dropdown-Werte, stabil über Sprachen).
+  const availableRulesets = ref<RulesetName[]>(listRulesets());
 
-  const activeRuleset = ref<string>(availableRulesets.value[0] || "");
+  const activeRuleset = ref<RulesetName>(availableRulesets.value[0] ?? "spiralingDown");
 
-  const currentRuleset = ref(
-    (
-      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets as {
-        [key: string]: any;
-      }
-    )[activeRuleset.value],
-  );
+  // Typisierter Regelsatz — reagiert auf Regelwahl UND Sprachwechsel (Registry).
+  const currentRuleset = computed(() => getRuleset(currentLocale.value, activeRuleset.value));
 
   // Funktionen
   function setSettings(newSettings: Partial<typeof settings.value>) {
@@ -127,38 +128,38 @@ export const useGameStore = defineStore("game", () => {
 
   function removePlayer(index: number) {
     players.value.splice(index, 1);
+    // Zug-Reihung in den gueltigen Bereich zwingen (Index klemmen).
+    if (currentPlayerIndex.value >= players.value.length) {
+      currentPlayerIndex.value = players.value.length === 0 ? 0 : players.value.length - 1;
+    }
   }
   function setActiveRules(ruleSetName: string) {
-    if (availableRulesets.value.includes(ruleSetName)) {
+    if (isRulesetName(ruleSetName)) {
       activeRuleset.value = ruleSetName;
     } else {
       console.warn(`Regelset "${ruleSetName}" ist nicht verfügbar.`);
     }
   }
 
-  // "Neues Spiel": Alles zuruecksetzen (Spieler leeren, Regel zurueck zum
-  // Standard, Zug-Reihung und Sieger zurueckgesetzt). Settings und Sprache
-  // bleiben erhalten.
   // "Neues Spiel": Spieler bleiben erhalten, alle Figuren zurueck an
-  // Startfeld (0), Zug-Reihung und Sieger zurueckgesetzt.
+  // Startfeld (0), Zug-Reihung und Sieger zurueckgesetzt. Phase wird "playing"
+  // (Runde wird neu gestartet).
   function restartRound() {
     players.value.forEach((p) => (p.position = 0));
     currentPlayerIndex.value = 0;
     winner.value = null;
+    phase.value = "playing";
   }
 
-  // Überwachung der Sprache (optional, falls weitere Effekte gewünscht)
-  watch(locale, () => {
-    console.log(`Sprache geändert zu: ${locale.value}`);
-    currentLocale.value = locale.value;
-  });
+  // Runde als beendet markieren (Sieger steht fest).
+  function setWinner(name: string) {
+    winner.value = name;
+    phase.value = "finished";
+  }
 
-  watch([activeRuleset, currentLocale], () => {
-    currentRuleset.value = (
-      i18n.global.messages[currentLocale.value as keyof typeof i18n.global.messages].rulesets as {
-        [key: string]: any;
-      }
-    )[activeRuleset.value];
+  // Sprache uebernehmen, damit currentRuleset (computed) neu laest.
+  watch(locale, () => {
+    currentLocale.value = locale.value;
   });
 
   watch(
@@ -181,11 +182,13 @@ export const useGameStore = defineStore("game", () => {
     settings,
     currentPlayerIndex,
     winner,
-    hasPlayed,
+    phase,
+    rolling,
     addPlayer,
     removePlayer,
     setActiveRules,
     setSettings,
     restartRound,
+    setWinner,
   };
 });

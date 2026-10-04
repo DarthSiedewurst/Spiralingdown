@@ -12,34 +12,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { PlayerModel } from "../store/interfaces";
+import { overlaySide } from "../board/boardGeometry";
 
 // Props definieren
 const props = defineProps<{
   player: PlayerModel;
   rule: string;
   playerPosition: number;
-  matrix: number[][];
 }>();
 
 // Berechnung der Position (links/rechts) des Overlays
-const overlayPosition = computed(() => {
-  let columnIndex = -1;
-
-  for (let row of props.matrix) {
-    const index = row.indexOf(props.playerPosition);
-    if (index !== -1) {
-      columnIndex = index;
-      break;
-    }
-  }
-
-  if (columnIndex !== -1) {
-    const maxCols = props.matrix[0].length;
-    return columnIndex >= maxCols / 2 ? "left" : "right";
-  }
-
-  return "right";
-});
+const overlayPosition = computed(() => overlaySide(props.playerPosition));
 </script>
 
 <style scoped>

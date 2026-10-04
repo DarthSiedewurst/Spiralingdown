@@ -1,11 +1,16 @@
 // src/helpers/descriptionHelper.ts
 
-export function processDescription(description: string, steps: number, playerName: string): string {
-  description = replacePlayerName(description, playerName);
-  if (description.includes("{switch}")) {
-    return getSwitchDescription(description, steps);
+export function processDescription(
+  description: string | undefined,
+  steps: number,
+  playerName: string,
+): string {
+  if (!description) return "";
+  const resolved = replacePlayerName(description, playerName);
+  if (resolved.includes("{switch}")) {
+    return getSwitchDescription(resolved, steps);
   }
-  return description;
+  return resolved;
 }
 
 function getSwitchDescription(description: string, steps: number): string {
@@ -20,5 +25,5 @@ function getSwitchDescription(description: string, steps: number): string {
 }
 
 export function replacePlayerName(input: string, playerName: string) {
-  return input.replace(/\{PlayerName\}/g, playerName);
+  return (input ?? "").replace(/\{PlayerName\}/g, playerName);
 }

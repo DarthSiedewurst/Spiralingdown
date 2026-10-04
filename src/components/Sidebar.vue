@@ -97,15 +97,17 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useGameStore } from "../store/store";
 
+type AppLocale = "de" | "en";
+
 // Zugriff auf i18n und Store
 const { locale } = useI18n();
 const store = useGameStore();
 
 // Lokaler Zustand für die ausgewählte Sprache
-const selectedLanguage = ref(locale.value);
+const selectedLanguage = ref<AppLocale>(locale.value as AppLocale);
 
 // Funktion zum Ändern der Sprache
-function changeLanguage(lang: string) {
+function changeLanguage(lang: AppLocale) {
   selectedLanguage.value = lang;
   locale.value = lang;
 }
@@ -125,6 +127,8 @@ function toggleVibration() {
 </script>
 
 <style scoped>
+/* .background wird global als flex-column (Display) gesetzt;
+   Sidebar braucht normale Spalten-Layout ohne Centering */
 .background {
   align-items: normal;
 }
@@ -149,47 +153,25 @@ function toggleVibration() {
   margin-right: 0.5vh;
   vertical-align: middle;
 }
-
 .btn-close::before {
   content: "⚙️";
 }
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  z-index: 1050;
-  overflow-y: auto;
-}
-
-.card-body {
-  background-color: white;
-  color: #333;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  height: 100%;
-  padding: 1vh;
-}
-
 .settings-images {
   display: flex;
   flex-direction: column; /* Bilder untereinander anordnen */
   gap: 1vh;
   margin-top: 5vh;
 }
-
 .setting-item {
   display: flex;
   align-items: center;
   gap: 1vh;
 }
-
 .settings-image {
   width: 5vw;
   height: auto;
   cursor: pointer;
 }
-
 .setting-item span {
   font-size: 1rem;
   font-weight: 500;

@@ -1,0 +1,120 @@
+// ---------------------------------------------------------------------
+// Design-Tokens (Single Source of Truth für Layout/Farben)
+//
+// Jede Vue-SASS-Regel, die bisher Hardcoded-Colors/Abstände/Radien genutzt
+// hat, soll hierher wandern. Neue Styles: hier anlegen, da referenzieren.
+//
+// Konvention:  $<domain>-<name>  (keine kebab-cases, keine SCSS-Functions)
+// ---------------------------------------------------------------------
+
+// -----------------------------------------------------------------
+// Farben (Palette)
+// -----------------------------------------------------------------
+$color-ink: #111418;
+$color-ink-soft: #333333;
+$color-ink-muted: #6b7280;
+$color-surface: #ffffff;
+$color-surface-muted: #f5f7fa;
+$color-line: #dee2e6;
+$color-line-strong: #333333;
+
+$color-primary: #0f4c81;
+$color-primary-dark: #0b3a67;
+$color-primary-soft: rgba(15, 76, 129, 0.12);
+
+$color-danger: #b02a37;
+$color-danger-soft: #fbe3e5;
+$color-success: #1f7a3d;
+$color-success-soft: #d6efe0;
+$color-warn: #a56a00;
+$color-warn-soft: #fff3d9;
+
+// -----------------------------------------------------------------
+// Board / Tile
+// -----------------------------------------------------------------
+$board-bg: url("../assets/pictures/tilebackground.jpg");
+$board-bg-app: url("../assets/pictures/background.jpg");
+$board-bierdeckel: url("../assets/pictures/bierdeckel.jpg");
+$board-bier-voll: url("../assets/pictures/bier-voll.png");
+$board-bier-leer: url("../assets/pictures/bier-leer.png");
+$board-player: url("../assets/pictures/player.png");
+
+// -----------------------------------------------------------------
+// Radien
+// -----------------------------------------------------------------
+$radius-sm: 0.25rem;
+$radius: 0.5rem;
+$radius-lg: 1rem;
+$radius-pill: 50rem;
+$radius-round: 100%;
+$radius-circle: 50%;
+$radius-box: 5vh;
+
+// -----------------------------------------------------------------
+// Spacing / Gaps
+// -----------------------------------------------------------------
+$gap-xs: 0.25rem;
+$gap-sm: 0.5rem;
+$gap: 1rem;
+$gap-lg: 1.5rem;
+$gap-xl: 2rem;
+$gap-board: 0.5vh;
+
+// -----------------------------------------------------------------
+// Font-Scale (h1..h4)
+// -----------------------------------------------------------------
+$font-h1: 3rem;
+$font-h2: 2.5rem;
+$font-h3: 2rem;
+$font-h4: 1.5rem;
+$font-body: 1rem;
+$font-sm: 0.875rem;
+$font-lab: 1.125rem;
+$font-tile: 2vh; // Board-Zellen-Text
+$font-dice: 6vh; // Gear-Icon / Dice-HUD
+$font-coin: 2.5vh; // Bierdeckel
+$font-overlay-h1: 6vh; // Overlay-Titel
+$font-overlay-h2: 5vh; // Overlay-Spieler
+
+// -----------------------------------------------------------------
+// Schatten
+// -----------------------------------------------------------------
+$shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+$shadow: 0 2px 8px rgba(16, 24, 40, 0.1);
+$shadow-lg: 0 12px 28px rgba(16, 24, 40, 0.18);
+$shadow-text: 0 0.3vh 0.3vh rgba(0, 0, 0, 0.83);
+$shadow-icon: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.7);
+$shadow-close: -2px 0 5px rgba(0, 0, 0, 0.2);
+
+// -----------------------------------------------------------------
+// Z-Levels
+// -----------------------------------------------------------------
+$z-overlay: 1;
+$z-dice: 2;
+$z-sidebar: 1050;
+$z-gear: 1001;
+
+// -----------------------------------------------------------------
+// Breakpoints
+// -----------------------------------------------------------------
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+
+// -----------------------------------------------------------------
+// Animation
+// -----------------------------------------------------------------
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+$duration-xs: 120ms;
+$duration: 200ms;
+$duration-move: 500ms; // Spieler-Positionswechsel (linear)
+$duration-lg: 320ms;
+$duration-dice: 4500ms; // Würfel-Animation (3d-dice/dice-box)
+
+// -----------------------------------------------------------------
+// Bierdeckel (Klickfläche)
+// -----------------------------------------------------------------
+$bier-d: 15vh;
+$bier-font: 2.5vh;

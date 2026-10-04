@@ -1,8 +1,12 @@
 export default class MusicService {
-  // Dynamisch alle Musikdateien importieren
-  static gonzalesPlaylist = Object.values(
-    import.meta.glob("../assets/music/*.mp3", { eager: true }),
-  ).map((module: any) => module.default);
+  // Dynamisch alle Musikdateien importieren (Vite: glob mit ?url -> default = asset-URL).
+  static gonzalesPlaylist: string[] = Object.values(
+    import.meta.glob("../assets/music/*.mp3", {
+      eager: true,
+      query: "?url",
+      import: "default",
+    }),
+  );
 
   // Zufälligen Track auswählen
   static getRandomTrackNumber() {
