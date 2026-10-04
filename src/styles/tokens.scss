@@ -70,9 +70,9 @@ $font-h4: 1.5rem;
 $font-body: 1rem;
 $font-sm: 0.875rem;
 $font-lab: 1.125rem;
-$font-tile: 2vh; // Board-Zellen-Text
+$font-tile: clamp(11px, 2vh, 26px); // Board-Zellen-Text (min/Max für flaches Querformat)
 $font-dice: 6vh; // Gear-Icon / Dice-HUD
-$font-coin: 2.5vh; // Bierdeckel
+$font-coin: clamp(14px, 2.5vh, 22px); // Bierdeckel
 $font-overlay-h1: 6vh; // Overlay-Titel
 $font-overlay-h2: 5vh; // Overlay-Spieler
 

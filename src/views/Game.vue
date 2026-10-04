@@ -10,6 +10,10 @@
   <div v-if="idle && !winner" class="idle-hint" @click="rollDice">
     <div class="idle-hint-message">{{ $t("tipToRoll") }}</div>
   </div>
+  <!-- Winner-Confetti: fällt solange das Winner-Modal offen ist. -->
+  <div v-if="winner" class="confetti" aria-hidden="true">
+    <span v-for="(c, i) in confettiPieces" :key="i" class="confetti-piece" :style="c.style"></span>
+  </div>
   <div
     class="modal fade"
     id="staticBackdrop"
@@ -29,7 +33,9 @@
           <router-link v-if="winner" class="btn btn-warning" :to="'/'">
             {{ $t("toHome") }}
           </router-link>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ $t("okay") }}
+          </button>
         </div>
       </div>
     </div>
@@ -207,8 +213,8 @@ function showModal(fieldData: FieldModel): Promise<void> {
   if (!mountedRef.value) return Promise.resolve();
 
   return new Promise((resolve) => {
-    modalTitle.value = fieldData.name || "Kein Titel";
-    modalDescription.value = fieldData.description || "Keine Beschreibung";
+    modalTitle.value = fieldData.name || t("noTitle");
+    modalDescription.value = fieldData.description || t("noDescription");
 
     if (fieldData.rule) {
       modalRule.value = fieldData.rule === "Random" ? getRandomRule() : fieldData.rule;
@@ -290,6 +296,31 @@ function getRandomRule() {
   }
   return ""; // Fallback, falls keine Regeln verfügbar sind
 }
+
+// Winner-Confetti: statische Stück-Liste einmal pro Winner-Bildschirm erzeugt.
+const CONFETTI_COLORS = ["#ffcc00", "#ff5f5f", "#37b24d", "#748ffc", "#e64980", "#ffffff"];
+const confettiPieces = computed(() =>
+  Array.from({ length: 80 }, (_, i) => {
+    const color = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+    const drift = (Math.random() - 0.5) * 20; // vw
+    const size = 6 + Math.random() * 10; // px
+    const duration = 2.4 + Math.random() * 2.6; // s
+    const delay = Math.random() * 1.4; // s
+    const skew = Math.random() * 360; // deg
+    return {
+      style: {
+        left: `${Math.random() * 100}vw`,
+        width: `${size}px`,
+        height: `${size * 1.4}px`,
+        background: color,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
+        "--drift": `${drift}vw`,
+        "--skew": `${skew}deg`,
+      } as Record<string, string>,
+    };
+  }),
+);
 
 watch(locale, () => {
   if (currentRuleIndex !== null) {
@@ -395,6 +426,33 @@ body {
   }
   50% {
     opacity: 0.5;
+  }
+}
+
+/* Winner-Confetti: Stück fällt von oben + weicht seitlich aus + dreht sich.
+   Z-Index über allem (auch über dem Winner-Modal), reine Decoration. */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2000;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  top: -3vh;
+  border-radius: 2px;
+  animation: confetti-fall 3s linear infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-5vh) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(var(--drift, 0vw)) rotate(var(--skew, 360deg));
+    opacity: 0.85;
   }
 }
 </style>
