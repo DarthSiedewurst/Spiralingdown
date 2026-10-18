@@ -24,8 +24,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Dyndns (Strato) — Zugangsdatei + Log + locales Skript (nur auf dem Raspi)
+# Dyndns (Strato) — Zugangsdatei + Log + locales Skript + IP-Cache (nur auf dem Raspi)
 dyndns.env
 dyndns.log
+dyndns.state
 update-dyndns.sh
 
