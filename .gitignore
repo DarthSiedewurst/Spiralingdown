@@ -23,3 +23,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Dyndns (Strato) — Zugangsdatei + Log + locales Skript (nur auf dem Raspi)
+dyndns.env
+dyndns.log
+update-dyndns.sh
+
